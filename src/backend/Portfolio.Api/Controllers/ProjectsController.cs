@@ -15,6 +15,15 @@ public class ProjectsController : ControllerBase
         _projectService = projectService;
     }
 
+    [HttpGet]
+    public async Task<ActionResult<PagedResult<ProjectResponse>>> GetAll(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? tag = null)
+    {
+        return Ok(await _projectService.GetAllAsync(page, pageSize, tag));
+    }
+
     [HttpGet("{id}")]
     public async Task<ActionResult<ProjectResponse>> GetById(int id)
     {
