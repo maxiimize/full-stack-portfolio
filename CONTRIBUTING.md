@@ -7,7 +7,7 @@ Thanks for your interest in contributing! Here's how you can help.
 1. **Fork** the repository.
 2. **Clone** your fork locally:
    ```bash
-   git clone https://github.com/<your-username>/full-stack-portfolio.git
+   git clone https://github.com/<maxiimize>/full-stack-portfolio.git
    ```
 3. Create a **feature branch**:
    ```bash
