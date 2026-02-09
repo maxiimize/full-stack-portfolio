@@ -14,6 +14,34 @@ public class ProjectService : IProjectService
         _context = context;
     }
 
+    public async Task<PagedResult<ProjectResponse>> GetAllAsync(int page = 1, int pageSize = 10, string? tag = null)
+    {
+        var query = _context.Projects
+            .Include(p => p.Tags)
+            .Include(p => p.Screenshots.OrderBy(s => s.SortOrder))
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(tag))
+        {
+            query = query.Where(p => p.Tags.Any(t => t.Name == tag));
+        }
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .OrderByDescending(p => p.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return new PagedResult<ProjectResponse>(
+            items.Select(ToResponse).ToList(),
+            totalCount,
+            page,
+            pageSize
+        );
+    }
+
     public async Task<ProjectResponse> CreateAsync(CreateProjectRequest request)
     {
         var project = new Project
