@@ -18,24 +18,25 @@ A modern full-stack portfolio application built with **ASP.NET Core** (backend) 
 
 | Layer    | Technology                     |
 | -------- | ------------------------------ |
-| Backend  | ASP.NET Core 8, C#, Entity Framework Core |
-| Frontend | Angular 17+, TypeScript, SCSS  |
-| Database | SQL Server / PostgreSQL        |
+| Backend  | ASP.NET Core (.NET 10), C#, Entity Framework Core |
+| Frontend | Angular 21, TypeScript, Tailwind CSS |
+| Database | SQL Server (LocalDB)           |
 | CI/CD    | GitHub Actions                 |
 
 ## Prerequisites
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download)
+- [.NET 10 SDK](https://dotnet.microsoft.com/download)
 - [Node.js 20+](https://nodejs.org/)
-- [Angular CLI](https://angular.dev/) (`npm install -g @angular/cli`)
+- SQL Server LocalDB (included with Visual Studio, or install via [SQL Server Express](https://www.microsoft.com/en-us/sql-server/sql-server-downloads))
 
 ## Getting Started
 
 ### Backend
 
 ```bash
-cd src/backend
+cd src/backend/Portfolio.Api
 dotnet restore
+dotnet ef database update   # create/migrate the database
 dotnet run
 ```
 
@@ -44,9 +45,9 @@ The API will be available at `https://localhost:5001`.
 ### Frontend
 
 ```bash
-cd src/frontend
+cd src/frontend/portfolio
 npm install
-ng serve
+npm start
 ```
 
 The app will be available at `http://localhost:4200`.
