@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Portfolio.Api.DTOs;
 using Portfolio.Api.Services;
@@ -38,6 +39,7 @@ public class ProjectsController : ControllerBase
         return Ok(await _projectService.SearchAsync(request));
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<ProjectResponse>> Create(CreateProjectRequest request)
     {
@@ -45,6 +47,7 @@ public class ProjectsController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = project.Id }, project);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<ActionResult<ProjectResponse>> Update(int id, UpdateProjectRequest request)
     {
@@ -59,6 +62,7 @@ public class ProjectsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {

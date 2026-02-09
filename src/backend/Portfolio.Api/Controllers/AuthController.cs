@@ -66,7 +66,8 @@ public class AuthController : ControllerBase
         return new AuthResponse
         {
             Token = _tokenService.CreateToken(user),
-            Expiration = DateTime.UtcNow.AddMinutes(expirationMinutes)
+            Expiration = DateTime.UtcNow.AddMinutes(expirationMinutes),
+            Role = user.Role
         };
     }
 }
