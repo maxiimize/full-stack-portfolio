@@ -1,0 +1,58 @@
+<section class="project-list">
+  <h2>Projects</h2>
+
+  @if (loading()) {
+    <p class="loading">Loading projects&hellip;</p>
+  }
+
+  @if (error(); as err) {
+    <div class="error">
+      <p>{{ err }}</p>
+      <button (click)="loadProjects()">Retry</button>
+    </div>
+  }
+
+  @if (!loading() && !error() && projects().length === 0) {
+    <p class="empty">No projects found.</p>
+  }
+
+  <div class="card-grid">
+    @for (project of projects(); track project.id) {
+      <article class="card">
+        @if (project.screenshots.length > 0) {
+          <img
+            class="card-image"
+            [src]="project.screenshots[0].url"
+            [alt]="project.screenshots[0].altText ?? project.title"
+          />
+        }
+
+        <div class="card-body">
+          <h3 class="card-title">{{ project.title }}</h3>
+          <p class="card-description">{{ project.description }}</p>
+
+          @if (project.tags.length > 0) {
+            <div class="card-tags">
+              @for (tag of project.tags; track tag) {
+                <span class="tag">{{ tag }}</span>
+              }
+            </div>
+          }
+
+          <div class="card-links">
+            @if (project.liveUrl) {
+              <a [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                Live Demo
+              </a>
+            }
+            @if (project.sourceUrl) {
+              <a [href]="project.sourceUrl" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                Source Code
+              </a>
+            }
+          </div>
+        </div>
+      </article>
+    }
+  </div>
+</section>
