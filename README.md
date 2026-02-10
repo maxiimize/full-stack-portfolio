@@ -105,7 +105,7 @@ npm start
 
 The app will be available at **`http://localhost:4200`**.
 
-> The frontend expects the API at `https://localhost:5001/api` by default (configured in `src/environments/environment.ts`). Update that file if your backend runs on a different port.
+> The frontend expects the API at `https://localhost:7175/api` by default (configured in `src/environments/environment.ts`). Update that file if your backend runs on a different port.
 
 ## API Endpoints
 
