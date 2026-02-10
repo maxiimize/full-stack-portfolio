@@ -165,6 +165,35 @@ public class ProjectService : IProjectService
         );
     }
 
+    public async Task<ScreenshotDto> UploadScreenshotAsync(int projectId, IFormFile file, string? altText, int sortOrder)
+    {
+        var project = await _context.Projects.FindAsync(projectId)
+            ?? throw new KeyNotFoundException($"Project with id {projectId} not found.");
+
+        var uploadsRoot = Environment.GetEnvironmentVariable("UPLOADS_PATH") ?? Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+        var projectDir = Path.Combine(uploadsRoot, projectId.ToString());
+        Directory.CreateDirectory(projectDir);
+
+        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+        var filePath = Path.Combine(projectDir, fileName);
+
+        await using var stream = new FileStream(filePath, FileMode.Create);
+        await file.CopyToAsync(stream);
+
+        var screenshot = new Screenshot
+        {
+            Url = $"/uploads/{projectId}/{fileName}",
+            AltText = altText,
+            SortOrder = sortOrder,
+            ProjectId = projectId
+        };
+
+        _context.Screenshots.Add(screenshot);
+        await _context.SaveChangesAsync();
+
+        return new ScreenshotDto(screenshot.Url, screenshot.AltText, screenshot.SortOrder);
+    }
+
     private static ProjectResponse ToResponse(Project project) => new(
         project.Id,
         project.Title,

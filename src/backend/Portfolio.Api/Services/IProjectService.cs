@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Portfolio.Api.DTOs;
 
 namespace Portfolio.Api.Services;
@@ -10,4 +11,5 @@ public interface IProjectService
     Task DeleteAsync(int id);
     Task<ProjectResponse?> GetByIdAsync(int id);
     Task<PagedResult<ProjectResponse>> SearchAsync(SearchProjectsRequest request);
+    Task<ScreenshotDto> UploadScreenshotAsync(int projectId, IFormFile file, string? altText, int sortOrder);
 }

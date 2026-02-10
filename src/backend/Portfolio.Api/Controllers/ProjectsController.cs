@@ -76,4 +76,23 @@ public class ProjectsController : ControllerBase
             return NotFound();
         }
     }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPost("{id}/screenshots")]
+    public async Task<ActionResult<ScreenshotDto>> UploadScreenshot(
+        int id,
+        IFormFile file,
+        [FromForm] string? altText,
+        [FromForm] int sortOrder = 0)
+    {
+        try
+        {
+            var screenshot = await _projectService.UploadScreenshotAsync(id, file, altText, sortOrder);
+            return Ok(screenshot);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+    }
 }

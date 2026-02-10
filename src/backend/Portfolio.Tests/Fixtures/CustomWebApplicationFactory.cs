@@ -11,9 +11,15 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly string _dbName = "TestDb_" + Guid.NewGuid().ToString();
 
+    public string UploadsPath { get; } = Path.Combine(Path.GetTempPath(), "portfolio_test_uploads_" + Guid.NewGuid().ToString("N"));
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Testing");
+
+        builder.UseSetting("UPLOADS_PATH", UploadsPath);
+
+        Environment.SetEnvironmentVariable("UPLOADS_PATH", UploadsPath);
 
         builder.ConfigureServices(services =>
         {
@@ -43,5 +49,12 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             db.Database.EnsureCreated();
         });
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        if (Directory.Exists(UploadsPath))
+            Directory.Delete(UploadsPath, recursive: true);
     }
 }
