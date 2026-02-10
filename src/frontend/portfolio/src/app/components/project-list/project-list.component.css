@@ -1,79 +1,26 @@
+/* ── Project List ──
+   Card, tag, button, grid & state classes come from
+   the global design system (styles.css).
+   Only component-specific overrides live here.
+   ──────────────────────────────────────────────── */
+
+:host {
+  display: block;
+}
+
 .project-list {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+  padding-block: 2.5rem;
 }
 
 h2 {
-  font-size: 1.75rem;
   margin-bottom: 1.5rem;
 }
 
-/* Grid */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.5rem;
-}
-
-/* Card */
-.card {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  background: var(--color-surface);
-  transition: box-shadow var(--transition-base);
-}
-
-.card:hover {
-  box-shadow: var(--shadow-md);
-}
-
-.card-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.card-body {
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.card-title {
-  font-size: 1.25rem;
-  margin: 0 0 0.5rem;
-}
-
-.card-description {
-  color: var(--color-text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.5;
-  flex: 1;
-}
-
-/* Tags */
+/* card-level tweaks */
 .card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
   margin: 0.75rem 0;
 }
 
-.tag {
-  background: var(--color-bg);
-  color: var(--color-accent);
-  padding: 0.2rem 0.6rem;
-  border-radius: 9999px;
-  font-size: 0.8rem;
-  border: 1px solid var(--color-border);
-}
-
-/* Links */
 .card-links {
   display: flex;
   gap: 0.75rem;
@@ -81,63 +28,7 @@ h2 {
   padding-top: 0.75rem;
 }
 
-.btn {
-  text-decoration: none;
-  padding: 0.45rem 1rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: background var(--transition-fast);
-}
-
-.btn-primary {
-  background: var(--color-accent);
-  color: var(--color-text);
-}
-
-.btn-primary:hover {
-  background: var(--color-accent-hover);
-}
-
-.btn-secondary {
-  background: var(--color-surface-hover);
-  color: var(--color-text-secondary);
-}
-
-.btn-secondary:hover {
-  background: var(--color-border);
-  color: var(--color-text);
-}
-
-/* States */
-.loading {
-  text-align: center;
-  color: var(--color-text-secondary);
-  padding: 2rem 0;
-}
-
-.error {
-  text-align: center;
-  color: var(--color-error);
-  padding: 2rem 0;
-}
-
+/* state overrides */
 .error button {
   margin-top: 0.75rem;
-  padding: 0.45rem 1.25rem;
-  border: none;
-  border-radius: var(--radius-sm);
-  background: var(--color-error);
-  color: var(--color-text);
-  cursor: pointer;
-}
-
-.error button:hover {
-  opacity: 0.85;
-}
-
-.empty {
-  text-align: center;
-  color: var(--color-text-secondary);
-  padding: 2rem 0;
 }

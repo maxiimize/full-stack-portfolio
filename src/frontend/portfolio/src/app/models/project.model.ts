@@ -15,6 +15,24 @@ export interface Project {
   screenshots: Screenshot[];
 }
 
+export interface CreateProjectRequest {
+  title: string;
+  description: string;
+  liveUrl?: string | null;
+  sourceUrl?: string | null;
+  tags: string[];
+  screenshots: Screenshot[];
+}
+
+export interface UpdateProjectRequest {
+  title: string;
+  description: string;
+  liveUrl?: string | null;
+  sourceUrl?: string | null;
+  tags: string[];
+  screenshots: Screenshot[];
+}
+
 export interface PagedResult<T> {
   items: T[];
   totalCount: number;

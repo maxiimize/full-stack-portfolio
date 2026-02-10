@@ -65,6 +65,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    // Seed default admin user for local development
+    using var scope = app.Services.CreateScope();
+    await DbInitializer.SeedAsync(scope.ServiceProvider);
 }
 
 app.UseHttpsRedirection();
