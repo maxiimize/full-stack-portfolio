@@ -88,7 +88,6 @@ Now listening on: http://localhost:5214
 | --- | ------------ |
 | `https://localhost:7175/swagger` | Interactive API docs (Swagger UI) |
 | `https://localhost:7175/health` | Health check – should return `{ "status": "Healthy" }` |
-| `https://localhost:7175/weatherforecast` | Sample endpoint |
 
 ### 3. Frontend (Angular)
 
@@ -134,7 +133,6 @@ The app will be available at **`http://localhost:4200`**.
 | Method | Route | Description |
 | ------ | ----- | ----------- |
 | GET | `/health` | Database health check |
-| GET | `/weatherforecast` | Sample data endpoint |
 
 ## Configuration
 
