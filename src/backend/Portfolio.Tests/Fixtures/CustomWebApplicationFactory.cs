@@ -9,6 +9,8 @@ namespace Portfolio.Tests.Fixtures;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
+    private readonly string _dbName = "TestDb_" + Guid.NewGuid().ToString();
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Testing");
@@ -32,7 +34,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             // Register AppDbContext with InMemory database
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseInMemoryDatabase("TestDb_" + Guid.NewGuid().ToString());
+                options.UseInMemoryDatabase(_dbName);
             });
 
             // Ensure the database is created
