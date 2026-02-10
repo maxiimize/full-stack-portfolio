@@ -18,13 +18,31 @@ export const routes: Routes = [
         (m) => m.ProjectListComponent
       ),
   },
-  // Example admin-protected route:
-  // {
-  //   path: 'admin',
-  //   canActivate: [adminGuard],
-  //   loadComponent: () =>
-  //     import('./components/admin/admin.component').then(
-  //       (m) => m.AdminComponent
-  //     ),
-  // },
+  {
+    path: 'admin',
+    canActivate: [adminGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./components/admin-dashboard/admin-dashboard.component').then(
+            (m) => m.AdminDashboardComponent
+          ),
+      },
+      {
+        path: 'new',
+        loadComponent: () =>
+          import('./components/project-form/project-form.component').then(
+            (m) => m.ProjectFormComponent
+          ),
+      },
+      {
+        path: ':id/edit',
+        loadComponent: () =>
+          import('./components/project-form/project-form.component').then(
+            (m) => m.ProjectFormComponent
+          ),
+      },
+    ],
+  },
 ];

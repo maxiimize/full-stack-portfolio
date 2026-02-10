@@ -2,7 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { PagedResult, Project } from '../models/project.model';
+import {
+  CreateProjectRequest,
+  PagedResult,
+  Project,
+  UpdateProjectRequest,
+} from '../models/project.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
@@ -24,5 +29,17 @@ export class ProjectService {
 
   getById(id: number): Observable<Project> {
     return this.http.get<Project>(`${this.apiUrl}/${id}`);
+  }
+
+  create(request: CreateProjectRequest): Observable<Project> {
+    return this.http.post<Project>(this.apiUrl, request);
+  }
+
+  update(id: number, request: UpdateProjectRequest): Observable<Project> {
+    return this.http.put<Project>(`${this.apiUrl}/${id}`, request);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
