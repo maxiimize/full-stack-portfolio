@@ -108,13 +108,131 @@ a:hover {
 /* ── Buttons ── */
 
 button, .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   font-family: var(--font-family);
   font-size: 0.875rem;
-  font-weight: 500;
-  border: none;
+  font-weight: 600;
+  line-height: 1.4;
+  padding: 0.6rem 1.25rem;
+  border: 2px solid transparent;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: background var(--transition-fast), color var(--transition-fast);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--transition-fast),
+    color            var(--transition-fast),
+    border-color     var(--transition-fast),
+    box-shadow       var(--transition-fast),
+    opacity          var(--transition-fast),
+    transform        var(--transition-fast);
+}
+
+button:active:not(:disabled),
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+button:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid var(--color-accent-hover);
+  outline-offset: 2px;
+}
+
+/* ── Primary ── */
+
+.btn-primary {
+  background-color: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  box-shadow: 0 0 12px rgb(59 130 246 / 0.35);
+}
+
+/* ── Outline ── */
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.btn-outline:hover:not(:disabled) {
+  background-color: var(--color-accent);
+  color: #fff;
+  box-shadow: 0 0 12px rgb(59 130 246 / 0.25);
+}
+
+/* ── Secondary (surface) ── */
+
+.btn-secondary {
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text);
+  border-color: var(--color-text-secondary);
+}
+
+/* ── Danger ── */
+
+.btn-danger {
+  background-color: var(--color-error);
+  color: #fff;
+  border-color: var(--color-error);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #dc2626;
+  border-color: #dc2626;
+  box-shadow: 0 0 12px rgb(239 68 68 / 0.35);
+}
+
+/* ── Success ── */
+
+.btn-success {
+  background-color: var(--color-success);
+  color: #fff;
+  border-color: var(--color-success);
+}
+
+.btn-success:hover:not(:disabled) {
+  background-color: #16a34a;
+  border-color: #16a34a;
+  box-shadow: 0 0 12px rgb(34 197 94 / 0.35);
+}
+
+/* ── Disabled ── */
+
+button:disabled,
+.btn:disabled,
+.btn-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Size variants ── */
+
+.btn-sm {
+  font-size: 0.8rem;
+  padding: 0.4rem 0.85rem;
+}
+
+.btn-lg {
+  font-size: 1rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-md);
 }
 
 /* ── Inputs & Forms ── */
