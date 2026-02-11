@@ -15,10 +15,10 @@
 }
 
 .header-brand {
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
   font-weight: 700;
   color: var(--color-text);
-  letter-spacing: -0.025em;
+  letter-spacing: var(--tracking-tight);
 }
 
 .header-brand:hover {
@@ -28,11 +28,11 @@
 .header-nav {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: var(--space-5);
 }
 
 .header-link {
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   color: var(--color-text-secondary);
 }
