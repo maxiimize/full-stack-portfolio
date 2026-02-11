@@ -1,32 +1,83 @@
-<section class="project-list container">
-  <h2>Projects</h2>
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hero-orb hero-orb--1"></div>
+    <div class="hero-orb hero-orb--2"></div>
+    <div class="hero-grid"></div>
+  </div>
+
+  <div class="hero-content container">
+    <p class="hero-eyebrow">Full-Stack Developer</p>
+    <h1 class="hero-title">
+      Crafting digital
+      <span class="text-gradient-animated">experiences</span>
+    </h1>
+    <p class="hero-subtitle">
+      A curated collection of projects showcasing modern web development
+      with Angular, .NET, and cloud technologies.
+    </p>
+  </div>
+</section>
+
+<!-- Projects Grid -->
+<section class="projects-section container">
+  <div class="section-header">
+    <h2 class="section-title">Featured Projects</h2>
+    <div class="section-line" aria-hidden="true"></div>
+  </div>
 
   @if (loading()) {
-    <div class="card-grid">
+    <div class="card-grid stagger-children">
       <app-skeleton-card [count]="6" />
     </div>
   }
 
   @if (error(); as err) {
-    <div class="state-message state-message--error">
-      <p>{{ err }}</p>
-      <button class="btn btn-danger btn-sm" (click)="loadProjects()">Retry</button>
+    <div class="error-state animate-scale-in">
+      <div class="error-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="48" height="48">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <p class="error-text">{{ err }}</p>
+      <button class="btn btn-outline" (click)="loadProjects()">Try Again</button>
     </div>
   }
 
   @if (!loading() && !error() && projects().length === 0) {
-    <p class="state-message">No projects found.</p>
+    <div class="empty-state animate-scale-in">
+      <div class="empty-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="48" height="48">
+          <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+          <polyline points="13 2 13 9 20 9"/>
+        </svg>
+      </div>
+      <p class="empty-text">No projects yet</p>
+      <p class="empty-subtext">Check back soon for new work.</p>
+    </div>
   }
 
-  <div class="card-grid">
+  <div class="card-grid stagger-children">
     @for (project of projects(); track project.id) {
       <article class="card">
         @if (project.screenshots.length > 0) {
-          <img
-            class="card-image"
-            [src]="project.screenshots[0].url"
-            [alt]="project.screenshots[0].altText ?? project.title"
-          />
+          <div class="card-image-wrap">
+            <img
+              [src]="project.screenshots[0].url"
+              [alt]="project.screenshots[0].altText ?? project.title"
+              loading="lazy"
+            />
+          </div>
+        } @else {
+          <div class="card-placeholder">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" width="40" height="40">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
         }
 
         <div class="card-body">
@@ -44,12 +95,21 @@
           <div class="card-links">
             @if (project.liveUrl) {
               <a [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
                 Live Demo
               </a>
             }
             @if (project.sourceUrl) {
               <a [href]="project.sourceUrl" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
-                Source Code
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+                  <polyline points="16 18 22 12 16 6"/>
+                  <polyline points="8 6 2 12 8 18"/>
+                </svg>
+                Source
               </a>
             }
           </div>

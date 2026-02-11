@@ -8,6 +8,7 @@ import { LoginRequest } from '../../models/auth.model';
   selector: 'app-login',
   imports: [FormsModule, RouterLink],
   templateUrl: './login.component.html',
+  styleUrl: './login.component.css',
 })
 export class LoginComponent {
   email = '';

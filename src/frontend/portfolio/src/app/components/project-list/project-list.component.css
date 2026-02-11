@@ -1,22 +1,140 @@
-/* ── Project List ──
-   Card, tag, button, grid & state classes come from
-   the global design system (styles.css).
-   Only component-specific overrides live here.
-   ──────────────────────────────────────────────── */
+/* ── Project List Page ── */
 
 :host {
   display: block;
 }
 
-.project-list {
-  padding-block: var(--space-10);
+/* ───────── Hero Section ───────── */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-20) 0 var(--space-16);
+  text-align: center;
 }
 
-h2 {
-  margin-bottom: var(--space-6);
+@media (min-width: 640px) {
+  .hero {
+    padding: var(--space-24) 0 var(--space-20);
+  }
 }
 
-/* card-level tweaks */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.12;
+}
+
+.hero-orb--1 {
+  width: 500px;
+  height: 500px;
+  background: var(--color-accent);
+  top: -150px;
+  right: -100px;
+  animation: float 8s ease-in-out infinite;
+}
+
+.hero-orb--2 {
+  width: 400px;
+  height: 400px;
+  background: var(--color-accent-2);
+  bottom: -100px;
+  left: -80px;
+  animation: float 10s ease-in-out infinite reverse;
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--color-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+  background-size: 80px 80px;
+  opacity: 0.15;
+  mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black 20%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black 20%, transparent 70%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  animation: slide-up 0.7s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.hero-eyebrow {
+  display: inline-block;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-4);
+  padding: 0.3rem 1rem;
+  border: 1px solid var(--color-accent-subtle);
+  background-color: var(--color-accent-subtle);
+  border-radius: 100px;
+}
+
+.hero-title {
+  font-size: clamp(2rem, 5vw, 3.75rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+  margin-bottom: var(--space-5);
+  max-width: 700px;
+  margin-inline: auto;
+}
+
+.hero-subtitle {
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  max-width: 520px;
+  margin-inline: auto;
+}
+
+/* ───────── Projects Section ───────── */
+
+.projects-section {
+  padding-bottom: var(--space-20);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.section-title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-text);
+  white-space: nowrap;
+  margin: 0;
+}
+
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--color-border-hover) 0%,
+    transparent 100%
+  );
+}
+
+/* ── Card overrides ── */
+
 .card-tags {
   margin: var(--space-3) 0;
 }
@@ -25,10 +143,58 @@ h2 {
   display: flex;
   gap: var(--space-3);
   margin-top: auto;
-  padding-top: var(--space-3);
+  padding-top: var(--space-4);
 }
 
-/* state overrides */
-.error button {
-  margin-top: var(--space-3);
+/* ── Card placeholder for projects without screenshots ── */
+
+.card-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 220px;
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-bg) 100%);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  opacity: 0.4;
+}
+
+/* ── Error & Empty States ── */
+
+.error-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-16) var(--space-4);
+  gap: var(--space-4);
+}
+
+.error-icon,
+.empty-icon {
+  color: var(--color-text-muted);
+  opacity: 0.4;
+}
+
+.error-icon {
+  color: var(--color-error);
+  opacity: 0.6;
+}
+
+.error-text {
+  color: var(--color-error);
+  font-weight: 500;
+}
+
+.empty-text {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.empty-subtext {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
 }
