@@ -1,4 +1,19 @@
 @import "tailwindcss";
+@config "../tailwind.config.js";
+
+/* ── Dark-mode class strategy ──
+   Apply .dark to <html> to activate dark utilities (e.g. dark:bg-gray-900).
+   The variant below tells Tailwind v4 to scope dark: to the .dark selector. */
+@variant dark (&:where(.dark, .dark *));
+
+/* ── Expose design-system tokens to Tailwind's @theme layer ── */
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: "Fira Code", "Cascadia Code", "JetBrains Mono",
+    ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
 
 /* ===================================================
    Design System – Dark Tech Theme (default)
