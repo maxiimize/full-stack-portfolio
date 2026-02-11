@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ===================================================
-   Design System – Dark Tech Theme
+   Design System – Dark Tech Theme (default)
    =================================================== */
 
 :root {
@@ -44,6 +44,47 @@
   /* ── Transitions ── */
   --transition-fast: 0.15s ease;
   --transition-base: 0.2s ease;
+}
+
+/* ===================================================
+   Light Theme Overrides
+   =================================================== */
+
+body.light-theme {
+  --color-bg:             #F8FAFC;
+  --color-surface:        #FFFFFF;
+  --color-surface-hover:  #F1F5F9;
+
+  --color-border:         #CBD5E1;
+
+  --color-text:           #1E293B;
+  --color-text-secondary: #64748B;
+
+  --color-accent:         #2563EB;
+  --color-accent-hover:   #1D4ED8;
+
+  --color-success:        #16A34A;
+  --color-warning:        #D97706;
+  --color-error:          #DC2626;
+
+  --shadow-sm:  0 1px 2px  rgb(0 0 0 / 0.05);
+  --shadow-md:  0 4px 12px rgb(0 0 0 / 0.08);
+  --shadow-lg:  0 8px 24px rgb(0 0 0 / 0.12);
+}
+
+/* ── Smooth theme transition ── */
+
+body.theme-transition,
+body.theme-transition *,
+body.theme-transition *::before,
+body.theme-transition *::after {
+  transition:
+    background-color 0.3s ease,
+    color            0.3s ease,
+    border-color     0.3s ease,
+    box-shadow       0.3s ease,
+    fill             0.3s ease,
+    stroke           0.3s ease !important;
 }
 
 /* ── Base Reset & Defaults ── */
