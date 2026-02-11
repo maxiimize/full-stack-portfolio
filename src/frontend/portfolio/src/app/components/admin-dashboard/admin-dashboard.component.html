@@ -1,0 +1,61 @@
+<section class="container section">
+  <div class="panel">
+    <div class="panel-header">
+      <h2>Admin Dashboard</h2>
+      <a routerLink="/admin/new" class="btn btn-primary btn-sm">+ New Project</a>
+    </div>
+
+    @if (loading()) {
+      <p class="state-message">Loading projects&hellip;</p>
+    }
+
+    @if (error(); as err) {
+      <div class="alert alert--error">{{ err }}</div>
+    }
+
+    @if (!loading() && !error() && projects().length === 0) {
+      <div class="empty-state">
+        <p>No projects yet.</p>
+        <a routerLink="/admin/new" class="btn btn-primary">Create your first project</a>
+      </div>
+    }
+
+    @if (!loading() && projects().length > 0) {
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Tags</th>
+              <th>Created</th>
+              <th class="col-actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (project of projects(); track project.id) {
+              <tr>
+                <td class="cell-title">{{ project.title }}</td>
+                <td>
+                  <div class="tag-group">
+                    @for (tag of project.tags; track tag) {
+                      <span class="tag">{{ tag }}</span>
+                    }
+                  </div>
+                </td>
+                <td class="cell-date">{{ project.createdAt | date:'mediumDate' }}</td>
+                <td class="col-actions">
+                  <a [routerLink]="['/admin', project.id, 'edit']" class="btn btn-outline btn-sm">
+                    Edit
+                  </a>
+                  <button class="btn btn-danger btn-sm" (click)="deleteProject(project)">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</section>

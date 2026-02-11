@@ -1,19 +1,19 @@
-<section class="project-list">
+<section class="project-list container">
   <h2>Projects</h2>
 
   @if (loading()) {
-    <p class="loading">Loading projects&hellip;</p>
+    <p class="state-message">Loading projects&hellip;</p>
   }
 
   @if (error(); as err) {
-    <div class="error">
+    <div class="state-message state-message--error">
       <p>{{ err }}</p>
-      <button (click)="loadProjects()">Retry</button>
+      <button class="btn btn-danger btn-sm" (click)="loadProjects()">Retry</button>
     </div>
   }
 
   @if (!loading() && !error() && projects().length === 0) {
-    <p class="empty">No projects found.</p>
+    <p class="state-message">No projects found.</p>
   }
 
   <div class="card-grid">
@@ -32,7 +32,7 @@
           <p class="card-description">{{ project.description }}</p>
 
           @if (project.tags.length > 0) {
-            <div class="card-tags">
+            <div class="tag-group card-tags">
               @for (tag of project.tags; track tag) {
                 <span class="tag">{{ tag }}</span>
               }
@@ -41,12 +41,12 @@
 
           <div class="card-links">
             @if (project.liveUrl) {
-              <a [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+              <a [href]="project.liveUrl" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
                 Live Demo
               </a>
             }
             @if (project.sourceUrl) {
-              <a [href]="project.sourceUrl" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+              <a [href]="project.sourceUrl" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
                 Source Code
               </a>
             }

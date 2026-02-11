@@ -152,8 +152,6 @@ Application settings live in `src/backend/Portfolio.Api/appsettings.Development.
 }
 ```
 
-> **Important:** Never commit real secrets. Use [User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) or environment variables for production.
-
 ## Running Tests
 
 ### Backend Tests

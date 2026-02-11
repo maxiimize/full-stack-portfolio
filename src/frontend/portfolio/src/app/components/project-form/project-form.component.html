@@ -1,0 +1,98 @@
+<section class="container section">
+  <div class="panel" style="max-width: 720px; margin-inline: auto;">
+    <div class="panel-header">
+      <h2>{{ heading }}</h2>
+      <a routerLink="/admin" class="btn btn-secondary btn-sm">Back</a>
+    </div>
+
+    @if (loading()) {
+      <p class="state-message">Loading project&hellip;</p>
+    } @else {
+      @if (errorMessage()) {
+        <div class="alert alert--error">{{ errorMessage() }}</div>
+      }
+
+      @if (successMessage()) {
+        <div class="alert alert--success">{{ successMessage() }}</div>
+      }
+
+      <form #projectForm="ngForm" (ngSubmit)="projectForm.valid && onSubmit()" class="form-stack">
+        <div class="form-group">
+          <label class="form-label" for="title">Title *</label>
+          <input
+            id="title"
+            name="title"
+            type="text"
+            required
+            maxlength="200"
+            [(ngModel)]="title"
+            placeholder="My Awesome Project"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="description">Description *</label>
+          <textarea
+            id="description"
+            name="description"
+            required
+            rows="5"
+            [(ngModel)]="description"
+            placeholder="What does this project do?"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="liveUrl">Live URL</label>
+          <input
+            id="liveUrl"
+            name="liveUrl"
+            type="url"
+            [(ngModel)]="liveUrl"
+            placeholder="https://example.com"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="sourceUrl">Source URL</label>
+          <input
+            id="sourceUrl"
+            name="sourceUrl"
+            type="url"
+            [(ngModel)]="sourceUrl"
+            placeholder="https://github.com/you/repo"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="tags">Tags</label>
+          <input
+            id="tags"
+            name="tags"
+            type="text"
+            [(ngModel)]="tagsInput"
+            placeholder="Angular, C#, Docker (comma-separated)"
+          />
+          <small>Separate tags with commas</small>
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="projectForm.invalid || saving()"
+          >
+            @if (saving()) {
+              Saving&hellip;
+            } @else if (isEditMode) {
+              Update Project
+            } @else {
+              Create Project
+            }
+          </button>
+          <a routerLink="/admin" class="btn btn-outline">Cancel</a>
+        </div>
+      </form>
+    }
+  </div>
+</section>
