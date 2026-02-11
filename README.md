@@ -144,7 +144,7 @@ Application settings live in `src/backend/Portfolio.Api/appsettings.Development.
     "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=PortfolioDB;Trusted_Connection=True;TrustServerCertificate=True"
   },
   "Jwt": {
-    "Key": "SuperSecretDevKey_AtLeast32Characters!!",   // Change in production!
+    "Key": "SuperSecretDevKey_AtLeast32Characters!!",   // Change in production
     "Issuer": "Portfolio.Api",
     "Audience": "Portfolio.Client",
     "ExpirationInMinutes": 60
