@@ -2,7 +2,9 @@
   <h2>Projects</h2>
 
   @if (loading()) {
-    <p class="state-message">Loading projects&hellip;</p>
+    <div class="card-grid">
+      <app-skeleton-card [count]="6" />
+    </div>
   }
 
   @if (error(); as err) {
