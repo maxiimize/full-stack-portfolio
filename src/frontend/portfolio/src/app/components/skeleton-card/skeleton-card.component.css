@@ -1,0 +1,95 @@
+/* ── Shimmer keyframes ── */
+
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+/* ── Shared shimmer effect ── */
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface) 0%,
+    var(--color-surface-hover) 40%,
+    var(--color-surface) 80%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Card shell ── */
+
+.skeleton-card {
+  pointer-events: none;
+}
+
+.skeleton-card:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--color-border);
+}
+
+/* ── Image placeholder (matches .card-image 200px) ── */
+
+.skeleton-image {
+  width: 100%;
+  height: 200px;
+  border-radius: 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ── Title placeholder ── */
+
+.skeleton-title {
+  height: 1.25rem;
+  width: 60%;
+  margin-bottom: 0.75rem;
+}
+
+/* ── Description lines ── */
+
+.skeleton-text {
+  height: 0.85rem;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-text--short {
+  width: 75%;
+}
+
+/* ── Tag placeholders ── */
+
+.skeleton-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.75rem 0;
+}
+
+.skeleton-tag {
+  height: 1.4rem;
+  width: 4rem;
+  border-radius: 9999px;
+}
+
+/* ── Button placeholders ── */
+
+.skeleton-links {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+}
+
+.skeleton-btn {
+  height: 2rem;
+  width: 5.5rem;
+  border-radius: var(--radius-sm);
+}
