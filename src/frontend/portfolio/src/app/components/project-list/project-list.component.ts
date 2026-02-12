@@ -30,12 +30,14 @@ export class ProjectListComponent implements OnInit {
   }
 
   prevScreenshot(projectId: number, total: number, event: Event): void {
+    event.preventDefault();
     event.stopPropagation();
     const current = this.getActiveIndex(projectId);
     this.activeScreenshot[projectId] = current > 0 ? current - 1 : total - 1;
   }
 
   nextScreenshot(projectId: number, total: number, event: Event): void {
+    event.preventDefault();
     event.stopPropagation();
     const current = this.getActiveIndex(projectId);
     this.activeScreenshot[projectId] = current < total - 1 ? current + 1 : 0;

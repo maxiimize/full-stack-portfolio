@@ -205,20 +205,25 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 2;
-  width: 30px;
-  height: 30px;
+  z-index: 3;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: none;
-  background: rgb(0 0 0 / 0.45);
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+  background: rgb(0 0 0 / 0.5);
   color: #fff;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity 0.2s, background 0.15s;
+  transition: opacity 0.2s ease, background 0.15s ease, transform 0.15s ease;
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.25);
 }
 
 .card:hover .carousel-btn {
@@ -226,7 +231,18 @@
 }
 
 .carousel-btn:hover {
-  background: rgb(0 0 0 / 0.7);
+  background: rgb(0 0 0 / 0.75);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-btn:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  opacity: 1;
 }
 
 .carousel-btn--prev {
