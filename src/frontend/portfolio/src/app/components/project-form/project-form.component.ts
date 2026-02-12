@@ -6,6 +6,7 @@ import { ProjectService } from '../../services/project.service';
 import {
   CreateProjectRequest,
   Project,
+  Screenshot,
   UpdateProjectRequest,
 } from '../../models/project.model';
 
@@ -25,6 +26,12 @@ export class ProjectFormComponent implements OnInit {
   liveUrl = '';
   sourceUrl = '';
   tagsInput = '';
+
+  /** Screenshots already saved on the server */
+  screenshots = signal<Screenshot[]>([]);
+  /** Tracks files queued for upload (create mode or adding to existing project) */
+  pendingFiles: { file: File; altText: string; preview: string }[] = [];
+  uploadingScreenshot = signal(false);
 
   readonly loading = signal(false);
   readonly saving = signal(false);
@@ -66,6 +73,7 @@ export class ProjectFormComponent implements OnInit {
         this.liveUrl = project.liveUrl ?? '';
         this.sourceUrl = project.sourceUrl ?? '';
         this.tagsInput = project.tags.join(', ');
+        this.screenshots.set(project.screenshots);
         this.loading.set(false);
       },
       error: () => {
@@ -73,6 +81,96 @@ export class ProjectFormComponent implements OnInit {
         this.loading.set(false);
       },
     });
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Screenshot management                                              */
+  /* ------------------------------------------------------------------ */
+
+  resolveUrl(url: string): string {
+    return this.projectService.resolveScreenshotUrl(url);
+  }
+
+  onFilesSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files) return;
+
+    for (const file of Array.from(input.files)) {
+      if (!file.type.startsWith('image/')) continue;
+      this.pendingFiles.push({
+        file,
+        altText: '',
+        preview: URL.createObjectURL(file),
+      });
+    }
+
+    // Reset input so the same file can be selected again
+    input.value = '';
+  }
+
+  removePendingFile(index: number): void {
+    URL.revokeObjectURL(this.pendingFiles[index].preview);
+    this.pendingFiles.splice(index, 1);
+  }
+
+  /** Upload all pending files (used in edit mode, so each goes straight to the server) */
+  async uploadPendingFiles(): Promise<void> {
+    if (this.pendingFiles.length === 0) return;
+    this.uploadingScreenshot.set(true);
+
+    const currentCount = this.screenshots().length;
+
+    for (let i = 0; i < this.pendingFiles.length; i++) {
+      const pending = this.pendingFiles[i];
+      try {
+        const screenshot = await this.projectService
+          .uploadScreenshot(this.projectId!, pending.file, pending.altText || undefined, currentCount + i)
+          .toPromise();
+        if (screenshot) {
+          this.screenshots.update((list) => [...list, screenshot]);
+        }
+      } catch {
+        this.errorMessage.set(`Failed to upload "${pending.file.name}".`);
+      }
+    }
+
+    // Clean up previews
+    this.pendingFiles.forEach((p) => URL.revokeObjectURL(p.preview));
+    this.pendingFiles = [];
+    this.uploadingScreenshot.set(false);
+  }
+
+  removeScreenshot(screenshot: Screenshot): void {
+    if (!screenshot.id || !this.projectId) return;
+
+    this.projectService.deleteScreenshot(this.projectId, screenshot.id).subscribe({
+      next: () => {
+        this.screenshots.update((list) => list.filter((s) => s !== screenshot));
+      },
+      error: () => {
+        this.errorMessage.set('Failed to delete screenshot.');
+      },
+    });
+  }
+
+  moveScreenshot(index: number, direction: -1 | 1): void {
+    const list = [...this.screenshots()];
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= list.length) return;
+
+    // Swap
+    [list[index], list[targetIndex]] = [list[targetIndex], list[index]];
+    // Update sort orders
+    list.forEach((s, i) => (s.sortOrder = i));
+    this.screenshots.set(list);
+
+    // Persist reorder if in edit mode
+    if (this.projectId) {
+      const ids = list.map((s) => s.id!);
+      this.projectService.reorderScreenshots(this.projectId, ids).subscribe({
+        error: () => this.errorMessage.set('Failed to reorder screenshots.'),
+      });
+    }
   }
 
   /* ------------------------------------------------------------------ */
@@ -96,12 +194,16 @@ export class ProjectFormComponent implements OnInit {
         liveUrl: this.liveUrl || null,
         sourceUrl: this.sourceUrl || null,
         tags,
-        screenshots: [],
+        screenshots: this.screenshots(),
       };
 
       this.projectService.update(this.projectId!, request).subscribe({
         next: () => {
           this.saving.set(false);
+          // Also upload any pending files after the update
+          if (this.pendingFiles.length > 0) {
+            this.uploadPendingFiles();
+          }
           this.successMessage.set('Project updated successfully.');
         },
         error: (err) => {
@@ -122,9 +224,17 @@ export class ProjectFormComponent implements OnInit {
       };
 
       this.projectService.create(request).subscribe({
-        next: () => {
+        next: (project) => {
           this.saving.set(false);
-          this.router.navigate(['/admin']);
+          // Upload pending files for the newly created project
+          if (this.pendingFiles.length > 0) {
+            this.projectId = project.id;
+            this.uploadPendingFiles().then(() => {
+              this.router.navigate(['/admin']);
+            });
+          } else {
+            this.router.navigate(['/admin']);
+          }
         },
         error: (err) => {
           this.saving.set(false);

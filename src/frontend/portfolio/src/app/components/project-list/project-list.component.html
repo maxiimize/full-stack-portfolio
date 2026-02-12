@@ -65,7 +65,7 @@
         @if (project.screenshots.length > 0) {
           <div class="card-image-wrap">
             <img
-              [src]="project.screenshots[0].url"
+              [src]="resolveUrl(project.screenshots[0].url)"
               [alt]="project.screenshots[0].altText ?? project.title"
               loading="lazy"
             />

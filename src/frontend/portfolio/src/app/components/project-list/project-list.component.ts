@@ -18,6 +18,10 @@ export class ProjectListComponent implements OnInit {
 
   constructor(private readonly projectService: ProjectService) {}
 
+  resolveUrl(url: string): string {
+    return this.projectService.resolveScreenshotUrl(url);
+  }
+
   ngOnInit(): void {
     this.loadProjects();
   }

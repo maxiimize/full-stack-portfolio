@@ -191,7 +191,7 @@ public class ProjectService : IProjectService
         _context.Screenshots.Add(screenshot);
         await _context.SaveChangesAsync();
 
-        return new ScreenshotDto(screenshot.Url, screenshot.AltText, screenshot.SortOrder);
+        return new ScreenshotDto(screenshot.Id, screenshot.Url, screenshot.AltText, screenshot.SortOrder);
     }
 
     public async Task DeleteScreenshotAsync(int projectId, int screenshotId)
@@ -230,7 +230,7 @@ public class ProjectService : IProjectService
 
         return project.Screenshots
             .OrderBy(s => s.SortOrder)
-            .Select(s => new ScreenshotDto(s.Url, s.AltText, s.SortOrder))
+            .Select(s => new ScreenshotDto(s.Id, s.Url, s.AltText, s.SortOrder))
             .ToList();
     }
 
@@ -242,6 +242,6 @@ public class ProjectService : IProjectService
         project.SourceUrl,
         project.CreatedAt,
         project.Tags.Select(t => t.Name).ToList(),
-        project.Screenshots.Select(s => new ScreenshotDto(s.Url, s.AltText, s.SortOrder)).ToList()
+        project.Screenshots.Select(s => new ScreenshotDto(s.Id, s.Url, s.AltText, s.SortOrder)).ToList()
     );
 }

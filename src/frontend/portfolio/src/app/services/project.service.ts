@@ -6,6 +6,7 @@ import {
   CreateProjectRequest,
   PagedResult,
   Project,
+  Screenshot,
   UpdateProjectRequest,
 } from '../models/project.model';
 
@@ -41,5 +42,28 @@ export class ProjectService {
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  uploadScreenshot(projectId: number, file: File, altText?: string, sortOrder = 0): Observable<Screenshot> {
+    const formData = new FormData();
+    formData.append('file', file);
+    if (altText) {
+      formData.append('altText', altText);
+    }
+    formData.append('sortOrder', sortOrder.toString());
+    return this.http.post<Screenshot>(`${this.apiUrl}/${projectId}/screenshots`, formData);
+  }
+
+  deleteScreenshot(projectId: number, screenshotId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${projectId}/screenshots/${screenshotId}`);
+  }
+
+  reorderScreenshots(projectId: number, screenshotIds: number[]): Observable<Screenshot[]> {
+    return this.http.put<Screenshot[]>(`${this.apiUrl}/${projectId}/screenshots/reorder`, screenshotIds);
+  }
+
+  /** Resolve a screenshot's relative URL to an absolute URL. */
+  resolveScreenshotUrl(relativeUrl: string): string {
+    return `${environment.baseUrl}${relativeUrl}`;
   }
 }
