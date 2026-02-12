@@ -1,0 +1,120 @@
+<div class="register-page">
+  <div class="register-bg" aria-hidden="true">
+    <div class="register-orb register-orb--1"></div>
+    <div class="register-orb register-orb--2"></div>
+  </div>
+
+  <div class="register-card" @scaleIn>
+    <div class="register-header">
+      <div class="register-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="28" height="28">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="8.5" cy="7" r="4"/>
+          <line x1="20" y1="8" x2="20" y2="14"/>
+          <line x1="23" y1="11" x2="17" y2="11"/>
+        </svg>
+      </div>
+      <h1 class="register-title">Create account</h1>
+      <p class="register-subtitle">Sign up to get started</p>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="alert alert--error" @fadeSlide>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        {{ errorMessage() }}
+      </div>
+    }
+
+    <form #registerForm="ngForm" (ngSubmit)="registerForm.valid && onSubmit()" class="register-form">
+      <div class="form-group">
+        <label class="form-label" for="userName">Username</label>
+        <input
+          id="userName"
+          name="userName"
+          type="text"
+          required
+          minlength="3"
+          maxlength="50"
+          [(ngModel)]="userName"
+          #userNameField="ngModel"
+          placeholder="your_username"
+        />
+        @if (userNameField.invalid && userNameField.touched) {
+          <span class="field-error">Username must be 3–50 characters.</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          email
+          [(ngModel)]="email"
+          #emailField="ngModel"
+          placeholder="you@example.com"
+        />
+        @if (emailField.invalid && emailField.touched) {
+          <span class="field-error">Please enter a valid email address.</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          required
+          minlength="8"
+          [(ngModel)]="password"
+          #passwordField="ngModel"
+          placeholder="••••••••"
+        />
+        @if (passwordField.invalid && passwordField.touched) {
+          <span class="field-error">Password must be at least 8 characters.</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="confirmPassword">Confirm password</label>
+        <input
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          required
+          [(ngModel)]="confirmPassword"
+          #confirmField="ngModel"
+          placeholder="••••••••"
+        />
+        @if (confirmField.touched && !passwordsMatch) {
+          <span class="field-error">Passwords do not match.</span>
+        }
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="registerForm.invalid || !passwordsMatch || loading()"
+        class="btn btn-primary btn-lg register-submit"
+      >
+        @if (loading()) {
+          <span class="register-spinner" aria-hidden="true"></span>
+          Creating account…
+        } @else {
+          Create Account
+        }
+      </button>
+    </form>
+
+    <p class="register-footer">
+      Already have an account?
+      <a routerLink="/login">Sign in</a>
+    </p>
+  </div>
+</div>
