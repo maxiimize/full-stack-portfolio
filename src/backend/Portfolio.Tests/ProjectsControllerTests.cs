@@ -62,7 +62,7 @@ public class ProjectsControllerTests : IClassFixture<CustomWebApplicationFactory
         Tags: ["C#", "ASP.NET"],
         Screenshots:
         [
-            new ScreenshotDto("https://example.com/screenshot.png", "Main view", 1)
+            new ScreenshotDto(0, "https://example.com/screenshot.png", "Main view", 1)
         ]
     );
 

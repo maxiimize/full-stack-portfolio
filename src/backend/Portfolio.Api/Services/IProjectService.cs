@@ -12,4 +12,6 @@ public interface IProjectService
     Task<ProjectResponse?> GetByIdAsync(int id);
     Task<PagedResult<ProjectResponse>> SearchAsync(SearchProjectsRequest request);
     Task<ScreenshotDto> UploadScreenshotAsync(int projectId, IFormFile file, string? altText, int sortOrder);
+    Task DeleteScreenshotAsync(int projectId, int screenshotId);
+    Task<List<ScreenshotDto>> ReorderScreenshotsAsync(int projectId, List<int> screenshotIds);
 }

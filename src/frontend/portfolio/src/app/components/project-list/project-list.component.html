@@ -65,10 +65,27 @@
         @if (project.screenshots.length > 0) {
           <div class="card-image-wrap">
             <img
-              [src]="project.screenshots[0].url"
-              [alt]="project.screenshots[0].altText ?? project.title"
+              [src]="resolveUrl(project.screenshots[getActiveIndex(project.id)].url)"
+              [alt]="project.screenshots[getActiveIndex(project.id)].altText ?? project.title"
               loading="lazy"
             />
+            @if (project.screenshots.length > 1) {
+              <button type="button" class="carousel-btn carousel-btn--prev" (click)="prevScreenshot(project.id, project.screenshots.length, $event)" aria-label="Previous screenshot">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                  <polyline points="15 18 9 12 15 6"/>
+                </svg>
+              </button>
+              <button type="button" class="carousel-btn carousel-btn--next" (click)="nextScreenshot(project.id, project.screenshots.length, $event)" aria-label="Next screenshot">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </button>
+              <div class="carousel-dots">
+                @for (s of project.screenshots; track s.url; let i = $index) {
+                  <span class="carousel-dot" [class.carousel-dot--active]="i === getActiveIndex(project.id)"></span>
+                }
+              </div>
+            }
           </div>
         } @else {
           <div class="card-placeholder">

@@ -1,4 +1,5 @@
 export interface Screenshot {
+  id?: number;
   url: string;
   altText: string | null;
   sortOrder: number;
