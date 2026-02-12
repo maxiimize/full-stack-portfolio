@@ -1,12 +1,8 @@
 /* ── Shimmer keyframes ── */
 
 @keyframes shimmer {
-  0% {
-    background-position: -400px 0;
-  }
-  100% {
-    background-position: 400px 0;
-  }
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
 }
 
 /* ── Shared shimmer effect ── */
@@ -15,11 +11,13 @@
   background: linear-gradient(
     90deg,
     var(--color-surface) 0%,
-    var(--color-surface-hover) 40%,
-    var(--color-surface) 80%
+    var(--color-surface-hover) 20%,
+    var(--color-surface-raised, var(--color-surface-hover)) 40%,
+    var(--color-surface-hover) 60%,
+    var(--color-surface) 100%
   );
-  background-size: 800px 100%;
-  animation: shimmer 1.6s ease-in-out infinite;
+  background-size: 1200px 100%;
+  animation: shimmer 2s ease-in-out infinite;
   border-radius: var(--radius-sm);
 }
 
@@ -35,11 +33,15 @@
   border-color: var(--color-border);
 }
 
-/* ── Image placeholder (matches .card-image 200px) ── */
+.skeleton-card::before {
+  display: none;
+}
+
+/* ── Image placeholder ── */
 
 .skeleton-image {
   width: 100%;
-  height: 200px;
+  height: 220px;
   border-radius: 0;
   border-bottom: 1px solid var(--color-border);
 }
@@ -47,21 +49,21 @@
 /* ── Title placeholder ── */
 
 .skeleton-title {
-  height: 1.25rem;
-  width: 60%;
-  margin-bottom: 0.75rem;
+  height: 1.15rem;
+  width: 55%;
+  margin-bottom: 0.85rem;
 }
 
 /* ── Description lines ── */
 
 .skeleton-text {
-  height: 0.85rem;
+  height: 0.75rem;
   width: 100%;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.55rem;
 }
 
 .skeleton-text--short {
-  width: 75%;
+  width: 70%;
 }
 
 /* ── Tag placeholders ── */
@@ -69,14 +71,14 @@
 .skeleton-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin: 0.75rem 0;
+  gap: 0.375rem;
+  margin: 0.85rem 0;
 }
 
 .skeleton-tag {
-  height: 1.4rem;
-  width: 4rem;
-  border-radius: 9999px;
+  height: 1.3rem;
+  width: 3.5rem;
+  border-radius: var(--radius-sm);
 }
 
 /* ── Button placeholders ── */
@@ -85,11 +87,11 @@
   display: flex;
   gap: 0.75rem;
   margin-top: auto;
-  padding-top: 0.75rem;
+  padding-top: 1rem;
 }
 
 .skeleton-btn {
   height: 2rem;
-  width: 5.5rem;
+  width: 5rem;
   border-radius: var(--radius-sm);
 }

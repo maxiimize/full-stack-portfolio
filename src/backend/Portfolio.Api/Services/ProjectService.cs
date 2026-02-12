@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Portfolio.Api.Data;
 using Portfolio.Api.DTOs;
 using Portfolio.Api.Models;
@@ -8,10 +9,13 @@ namespace Portfolio.Api.Services;
 public class ProjectService : IProjectService
 {
     private readonly AppDbContext _context;
+    private readonly string _uploadsRoot;
 
-    public ProjectService(AppDbContext context)
+    public ProjectService(AppDbContext context, IConfiguration configuration)
     {
         _context = context;
+        _uploadsRoot = configuration["UPLOADS_PATH"]
+            ?? Path.Combine(Directory.GetCurrentDirectory(), "uploads");
     }
 
     public async Task<PagedResult<ProjectResponse>> GetAllAsync(int page = 1, int pageSize = 10, string? tag = null)
@@ -170,8 +174,7 @@ public class ProjectService : IProjectService
         var project = await _context.Projects.FindAsync(projectId)
             ?? throw new KeyNotFoundException($"Project with id {projectId} not found.");
 
-        var uploadsRoot = Environment.GetEnvironmentVariable("UPLOADS_PATH") ?? Path.Combine(Directory.GetCurrentDirectory(), "uploads");
-        var projectDir = Path.Combine(uploadsRoot, projectId.ToString());
+        var projectDir = Path.Combine(_uploadsRoot, projectId.ToString());
         Directory.CreateDirectory(projectDir);
 
         var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
@@ -191,7 +194,45 @@ public class ProjectService : IProjectService
         _context.Screenshots.Add(screenshot);
         await _context.SaveChangesAsync();
 
-        return new ScreenshotDto(screenshot.Url, screenshot.AltText, screenshot.SortOrder);
+        return new ScreenshotDto(screenshot.Id, screenshot.Url, screenshot.AltText, screenshot.SortOrder);
+    }
+
+    public async Task DeleteScreenshotAsync(int projectId, int screenshotId)
+    {
+        var screenshot = await _context.Screenshots
+            .FirstOrDefaultAsync(s => s.Id == screenshotId && s.ProjectId == projectId)
+            ?? throw new KeyNotFoundException($"Screenshot with id {screenshotId} not found for project {projectId}.");
+
+        // Delete the physical file
+        var filePath = Path.Combine(_uploadsRoot, screenshot.Url.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
+            .Replace("uploads" + Path.DirectorySeparatorChar, ""));
+        if (File.Exists(filePath))
+            File.Delete(filePath);
+
+        _context.Screenshots.Remove(screenshot);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<ScreenshotDto>> ReorderScreenshotsAsync(int projectId, List<int> screenshotIds)
+    {
+        var project = await _context.Projects
+            .Include(p => p.Screenshots)
+            .FirstOrDefaultAsync(p => p.Id == projectId)
+            ?? throw new KeyNotFoundException($"Project with id {projectId} not found.");
+
+        for (var i = 0; i < screenshotIds.Count; i++)
+        {
+            var screenshot = project.Screenshots.FirstOrDefault(s => s.Id == screenshotIds[i])
+                ?? throw new KeyNotFoundException($"Screenshot with id {screenshotIds[i]} not found for project {projectId}.");
+            screenshot.SortOrder = i;
+        }
+
+        await _context.SaveChangesAsync();
+
+        return project.Screenshots
+            .OrderBy(s => s.SortOrder)
+            .Select(s => new ScreenshotDto(s.Id, s.Url, s.AltText, s.SortOrder))
+            .ToList();
     }
 
     private static ProjectResponse ToResponse(Project project) => new(
@@ -202,6 +243,6 @@ public class ProjectService : IProjectService
         project.SourceUrl,
         project.CreatedAt,
         project.Tags.Select(t => t.Name).ToList(),
-        project.Screenshots.Select(s => new ScreenshotDto(s.Url, s.AltText, s.SortOrder)).ToList()
+        project.Screenshots.Select(s => new ScreenshotDto(s.Id, s.Url, s.AltText, s.SortOrder)).ToList()
     );
 }

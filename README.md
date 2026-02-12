@@ -89,6 +89,15 @@ Now listening on: http://localhost:5214
 | `https://localhost:7175/swagger` | Interactive API docs (Swagger UI) |
 | `https://localhost:7175/health` | Health check – should return `{ "status": "Healthy" }` |
 
+#### Default Admin Credentials
+
+A default admin user is seeded in development mode:
+
+- **Email:** `admin@portfolio.dev`
+- **Password:** `Admin123!`
+
+Use these credentials to test authenticated endpoints (e.g., creating/updating projects).
+
 ### 3. Frontend (Angular)
 
 Open a **new terminal**:

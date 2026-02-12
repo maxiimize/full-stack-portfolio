@@ -186,4 +186,96 @@ public class ScreenshotUploadTests : IClassFixture<CustomWebApplicationFactory>
         var bytes = await File.ReadAllBytesAsync(files[0]);
         bytes.Length.Should().BeGreaterThan(0, "the saved file should not be empty");
     }
+
+    [Fact]
+    public async Task DeleteScreenshot_RemovesFromDatabase()
+    {
+        // Arrange
+        var token = await GetAdminTokenAsync();
+        var projectId = await CreateProjectAsync(token);
+
+        _client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        using var content = BuildFakeImageContent(altText: "To delete");
+        var uploadResponse = await _client.PostAsync($"/api/projects/{projectId}/screenshots", content);
+        uploadResponse.EnsureSuccessStatusCode();
+
+        // Read project to get screenshot id
+        var project = await _client.GetFromJsonAsync<ProjectResponse>($"/api/projects/{projectId}");
+        var screenshotId = project!.Screenshots.Single().Url;
+
+        // Get screenshot ID from DB
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var saved = db.Screenshots.Single(s => s.ProjectId == projectId);
+
+        // Act
+        var deleteResponse = await _client.DeleteAsync($"/api/projects/{projectId}/screenshots/{saved.Id}");
+
+        // Assert
+        deleteResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        using var scope2 = _factory.Services.CreateScope();
+        var db2 = scope2.ServiceProvider.GetRequiredService<AppDbContext>();
+        db2.Screenshots.Any(s => s.ProjectId == projectId).Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task DeleteScreenshot_NonExistentId_Returns404()
+    {
+        // Arrange
+        var token = await GetAdminTokenAsync();
+        var projectId = await CreateProjectAsync(token);
+
+        _client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        // Act
+        var response = await _client.DeleteAsync($"/api/projects/{projectId}/screenshots/99999");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task ReorderScreenshots_UpdatesSortOrder()
+    {
+        // Arrange
+        var token = await GetAdminTokenAsync();
+        var projectId = await CreateProjectAsync(token);
+
+        _client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+
+        using var content1 = BuildFakeImageContent(altText: "First", sortOrder: 0);
+        await _client.PostAsync($"/api/projects/{projectId}/screenshots", content1);
+
+        using var content2 = BuildFakeImageContent(altText: "Second", sortOrder: 1);
+        await _client.PostAsync($"/api/projects/{projectId}/screenshots", content2);
+
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var screenshots = db.Screenshots
+            .Where(s => s.ProjectId == projectId)
+            .OrderBy(s => s.SortOrder)
+            .ToList();
+
+        screenshots.Should().HaveCount(2);
+
+        // Reverse the order
+        var reorderedIds = new List<int> { screenshots[1].Id, screenshots[0].Id };
+
+        // Act
+        var response = await _client.PutAsJsonAsync(
+            $"/api/projects/{projectId}/screenshots/reorder", reorderedIds);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var result = await response.Content.ReadFromJsonAsync<List<ScreenshotDto>>();
+        result.Should().HaveCount(2);
+        result![0].AltText.Should().Be("Second");
+        result[1].AltText.Should().Be("First");
+    }
 }

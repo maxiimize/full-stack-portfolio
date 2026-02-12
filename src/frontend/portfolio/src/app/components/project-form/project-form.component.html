@@ -1,19 +1,40 @@
 <section class="container section">
-  <div class="panel" style="max-width: 720px; margin-inline: auto;">
+  <div class="form-panel animate-slide-up">
     <div class="panel-header">
-      <h2>{{ heading }}</h2>
-      <a routerLink="/admin" class="btn btn-secondary btn-sm">Back</a>
+      <div class="panel-header-left">
+        <a routerLink="/admin" class="btn btn-ghost btn-sm" aria-label="Back to dashboard">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+            <line x1="19" y1="12" x2="5" y2="12"/>
+            <polyline points="12 19 5 12 12 5"/>
+          </svg>
+          Back
+        </a>
+        <h2>{{ heading }}</h2>
+      </div>
     </div>
 
     @if (loading()) {
-      <p class="state-message">Loading project&hellip;</p>
+      <div class="state-message">Loading project…</div>
     } @else {
       @if (errorMessage()) {
-        <div class="alert alert--error">{{ errorMessage() }}</div>
+        <div class="alert alert--error">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          {{ errorMessage() }}
+        </div>
       }
 
       @if (successMessage()) {
-        <div class="alert alert--success">{{ successMessage() }}</div>
+        <div class="alert alert--success">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          {{ successMessage() }}
+        </div>
       }
 
       <form #projectForm="ngForm" (ngSubmit)="projectForm.valid && onSubmit()" class="form-stack">
@@ -42,26 +63,28 @@
           ></textarea>
         </div>
 
-        <div class="form-group">
-          <label class="form-label" for="liveUrl">Live URL</label>
-          <input
-            id="liveUrl"
-            name="liveUrl"
-            type="url"
-            [(ngModel)]="liveUrl"
-            placeholder="https://example.com"
-          />
-        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="liveUrl">Live URL</label>
+            <input
+              id="liveUrl"
+              name="liveUrl"
+              type="url"
+              [(ngModel)]="liveUrl"
+              placeholder="https://example.com"
+            />
+          </div>
 
-        <div class="form-group">
-          <label class="form-label" for="sourceUrl">Source URL</label>
-          <input
-            id="sourceUrl"
-            name="sourceUrl"
-            type="url"
-            [(ngModel)]="sourceUrl"
-            placeholder="https://github.com/you/repo"
-          />
+          <div class="form-group">
+            <label class="form-label" for="sourceUrl">Source URL</label>
+            <input
+              id="sourceUrl"
+              name="sourceUrl"
+              type="url"
+              [(ngModel)]="sourceUrl"
+              placeholder="https://github.com/you/repo"
+            />
+          </div>
         </div>
 
         <div class="form-group">
@@ -73,7 +96,130 @@
             [(ngModel)]="tagsInput"
             placeholder="Angular, C#, Docker (comma-separated)"
           />
-          <small>Separate tags with commas</small>
+          <small class="form-hint">Separate tags with commas</small>
+        </div>
+
+        <!-- Screenshots Section -->
+        <div class="form-group">
+          <label class="form-label">Screenshots</label>
+
+          <!-- Existing (saved) screenshots -->
+          @if (screenshots().length > 0) {
+            <div class="screenshot-grid">
+              @for (screenshot of screenshots(); track screenshot.url; let i = $index) {
+                <div class="screenshot-card">
+                  <img
+                    [src]="resolveUrl(screenshot.url)"
+                    [alt]="screenshot.altText ?? 'Screenshot'"
+                    class="screenshot-thumb"
+                  />
+                  <div class="screenshot-overlay">
+                    <div class="screenshot-actions">
+                      <button
+                        type="button"
+                        class="btn-icon"
+                        title="Move left"
+                        [disabled]="i === 0"
+                        (click)="moveScreenshot(i, -1)"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+                          <polyline points="15 18 9 12 15 6"/>
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn-icon"
+                        title="Move right"
+                        [disabled]="i === screenshots().length - 1"
+                        (click)="moveScreenshot(i, 1)"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn-icon btn-icon--danger"
+                        title="Remove screenshot"
+                        (click)="removeScreenshot(screenshot)"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+                          <polyline points="3 6 5 6 21 6"/>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  @if (screenshot.altText) {
+                    <span class="screenshot-alt">{{ screenshot.altText }}</span>
+                  }
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Pending (not yet uploaded) files -->
+          @if (pendingFiles.length > 0) {
+            <div class="screenshot-grid pending-grid">
+              @for (pending of pendingFiles; track pending.preview; let i = $index) {
+                <div class="screenshot-card screenshot-card--pending">
+                  <img
+                    [src]="pending.preview"
+                    [alt]="pending.altText || 'Pending screenshot'"
+                    class="screenshot-thumb"
+                  />
+                  <div class="screenshot-overlay">
+                    <div class="screenshot-actions">
+                      <button
+                        type="button"
+                        class="btn-icon btn-icon--danger"
+                        title="Remove"
+                        (click)="removePendingFile(i)"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+                          <line x1="18" y1="6" x2="6" y2="18"/>
+                          <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <input
+                    type="text"
+                    class="screenshot-alt-input"
+                    placeholder="Alt text (optional)"
+                    [(ngModel)]="pending.altText"
+                    [name]="'pending-alt-' + i"
+                  />
+                </div>
+              }
+            </div>
+          }
+
+          @if (uploadingScreenshot()) {
+            <div class="screenshot-uploading">
+              <span class="login-spinner" aria-hidden="true"></span>
+              Uploading screenshots…
+            </div>
+          }
+
+          <!-- File picker -->
+          <label class="screenshot-upload-btn btn btn-outline btn-sm" for="screenshotInput">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            Add Screenshots
+          </label>
+          <input
+            id="screenshotInput"
+            type="file"
+            accept="image/*"
+            multiple
+            hidden
+            (change)="onFilesSelected($event)"
+          />
+          <small class="form-hint">PNG, JPG, or WebP. You can select multiple files.</small>
         </div>
 
         <div class="form-actions">
@@ -83,14 +229,15 @@
             [disabled]="projectForm.invalid || saving()"
           >
             @if (saving()) {
-              Saving&hellip;
+              <span class="login-spinner" aria-hidden="true"></span>
+              Saving…
             } @else if (isEditMode) {
               Update Project
             } @else {
               Create Project
             }
           </button>
-          <a routerLink="/admin" class="btn btn-outline">Cancel</a>
+          <a routerLink="/admin" class="btn btn-secondary">Cancel</a>
         </div>
       </form>
     }

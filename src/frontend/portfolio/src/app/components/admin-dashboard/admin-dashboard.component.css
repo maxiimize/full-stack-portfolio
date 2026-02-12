@@ -7,66 +7,86 @@
 /* ── Alerts ── */
 
 .alert {
-  padding: 0.75rem 1rem;
+  padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-sm);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 500;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 .alert--error {
-  background-color: rgb(239 68 68 / 0.12);
+  background-color: rgb(239 68 68 / 0.08);
   color: var(--color-error);
-  border: 1px solid rgb(239 68 68 / 0.25);
+  border: 1px solid rgb(239 68 68 / 0.2);
 }
 
 /* ── Empty State ── */
 
 .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  padding: 3rem 1rem;
-  color: var(--color-text-secondary);
+  padding: var(--space-16) var(--space-4);
+  gap: var(--space-4);
 }
 
-.empty-state p {
-  margin-bottom: 1rem;
-  font-size: 1.05rem;
+.empty-icon {
+  color: var(--color-text-muted);
+  opacity: 0.3;
+}
+
+.empty-text {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-text);
 }
 
 /* ── Data Table ── */
 
 .table-wrap {
   overflow-x: auto;
+  border-radius: var(--radius-sm);
 }
 
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
 }
 
 .data-table th,
 .data-table td {
-  padding: 0.75rem 1rem;
+  padding: var(--space-4) var(--space-4);
   text-align: left;
   border-bottom: 1px solid var(--color-border);
 }
 
 .data-table th {
-  color: var(--color-text-secondary);
+  color: var(--color-text-muted);
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: var(--tracking-wider);
   white-space: nowrap;
+  background-color: var(--color-bg);
 }
 
 .data-table tbody tr {
-  transition: background-color var(--transition-fast);
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .data-table tbody tr:hover {
   background-color: var(--color-surface-hover);
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .cell-title {
@@ -75,8 +95,9 @@
 }
 
 .cell-date {
-  color: var(--color-text-secondary);
+  color: var(--color-text-muted);
   white-space: nowrap;
+  font-size: var(--text-xs);
 }
 
 .col-actions {

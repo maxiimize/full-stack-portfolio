@@ -95,4 +95,36 @@ public class ProjectsController : ControllerBase
             return NotFound();
         }
     }
+
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("{id}/screenshots/{screenshotId}")]
+    public async Task<IActionResult> DeleteScreenshot(int id, int screenshotId)
+    {
+        try
+        {
+            await _projectService.DeleteScreenshotAsync(id, screenshotId);
+            return NoContent();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("{id}/screenshots/reorder")]
+    public async Task<ActionResult<List<ScreenshotDto>>> ReorderScreenshots(
+        int id,
+        [FromBody] List<int> screenshotIds)
+    {
+        try
+        {
+            var result = await _projectService.ReorderScreenshotsAsync(id, screenshotIds);
+            return Ok(result);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+    }
 }
