@@ -9,11 +9,13 @@ import {
   Screenshot,
   UpdateProjectRequest,
 } from '../../models/project.model';
+import { slideUp, fadeSlide } from '../../animations';
 
 @Component({
   selector: 'app-project-form',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
+  animations: [slideUp, fadeSlide],
   templateUrl: './project-form.component.html',
   styleUrl: './project-form.component.css',
 })

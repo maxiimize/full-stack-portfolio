@@ -36,9 +36,9 @@
   --color-text-muted:     #64748b;
 
   /* ── Accent gradient palette ── */
-  --color-accent:         #6366f1;
-  --color-accent-hover:   #818cf8;
-  --color-accent-subtle:  rgb(99 102 241 / 0.12);
+  --color-accent:         #3B82F6;
+  --color-accent-hover:   #60A5FA;
+  --color-accent-subtle:  rgb(59 130 246 / 0.12);
   --color-accent-2:       #8b5cf6;
   --color-accent-3:       #06b6d4;
 
@@ -104,8 +104,8 @@
   --shadow-sm:  0 1px 3px  rgb(0 0 0 / 0.4), 0 1px 2px rgb(0 0 0 / 0.3);
   --shadow-md:  0 4px 16px rgb(0 0 0 / 0.5), 0 2px 4px rgb(0 0 0 / 0.3);
   --shadow-lg:  0 10px 40px rgb(0 0 0 / 0.6), 0 4px 12px rgb(0 0 0 / 0.4);
-  --shadow-glow: 0 0 20px rgb(99 102 241 / 0.15), 0 0 60px rgb(99 102 241 / 0.08);
-  --shadow-glow-lg: 0 0 30px rgb(99 102 241 / 0.25), 0 0 80px rgb(99 102 241 / 0.12);
+  --shadow-glow: 0 0 20px rgb(59 130 246 / 0.15), 0 0 60px rgb(59 130 246 / 0.08);
+  --shadow-glow-lg: 0 0 30px rgb(59 130 246 / 0.25), 0 0 80px rgb(59 130 246 / 0.12);
 
   /* ── Transitions ── */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -114,10 +114,10 @@
   --transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* ── Gradients ── */
-  --gradient-accent: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
-  --gradient-accent-hover: linear-gradient(135deg, #818cf8 0%, #a78bfa 50%, #22d3ee 100%);
+  --gradient-accent: linear-gradient(135deg, #3B82F6 0%, #8b5cf6 50%, #06b6d4 100%);
+  --gradient-accent-hover: linear-gradient(135deg, #60A5FA 0%, #a78bfa 50%, #22d3ee 100%);
   --gradient-surface: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 100%);
-  --gradient-glow: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgb(99 102 241 / 0.06), transparent 40%);
+  --gradient-glow: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgb(59 130 246 / 0.06), transparent 40%);
 }
 
 /* ===================================================
@@ -150,13 +150,13 @@ body.light-theme {
   --shadow-sm:  0 1px 3px  rgb(0 0 0 / 0.06), 0 1px 2px rgb(0 0 0 / 0.04);
   --shadow-md:  0 4px 16px rgb(0 0 0 / 0.08), 0 2px 4px rgb(0 0 0 / 0.04);
   --shadow-lg:  0 10px 40px rgb(0 0 0 / 0.1), 0 4px 12px rgb(0 0 0 / 0.06);
-  --shadow-glow: 0 0 20px rgb(79 70 229 / 0.1), 0 0 60px rgb(79 70 229 / 0.05);
-  --shadow-glow-lg: 0 0 30px rgb(79 70 229 / 0.15), 0 0 80px rgb(79 70 229 / 0.08);
+  --shadow-glow: 0 0 20px rgb(59 130 246 / 0.1), 0 0 60px rgb(59 130 246 / 0.05);
+  --shadow-glow-lg: 0 0 30px rgb(59 130 246 / 0.15), 0 0 80px rgb(59 130 246 / 0.08);
 
-  --gradient-accent: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #0891b2 100%);
-  --gradient-accent-hover: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+  --gradient-accent: linear-gradient(135deg, #2563EB 0%, #7c3aed 50%, #0891b2 100%);
+  --gradient-accent-hover: linear-gradient(135deg, #3B82F6 0%, #8b5cf6 50%, #06b6d4 100%);
   --gradient-surface: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg) 100%);
-  --gradient-glow: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgb(79 70 229 / 0.04), transparent 40%);
+  --gradient-glow: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgb(59 130 246 / 0.04), transparent 40%);
 }
 
 /* ── Smooth theme transition ── */
@@ -210,8 +210,8 @@ body.theme-transition *::after {
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 16px rgb(99 102 241 / 0.15); }
-  50%      { box-shadow: 0 0 24px rgb(99 102 241 / 0.3); }
+  0%, 100% { box-shadow: 0 0 16px rgb(59 130 246 / 0.15); }
+  50%      { box-shadow: 0 0 24px rgb(59 130 246 / 0.3); }
 }
 
 @keyframes float {
@@ -355,7 +355,8 @@ button, .btn {
 
 button:active:not(:disabled),
 .btn:active:not(:disabled) {
-  transform: scale(0.97);
+  transform: scale(0.96);
+  transition-duration: 80ms;
 }
 
 button:focus-visible,
@@ -371,12 +372,12 @@ button:focus-visible,
   background-size: 200% auto;
   color: #fff;
   border-color: transparent;
-  box-shadow: 0 2px 8px rgb(99 102 241 / 0.25);
+  box-shadow: 0 2px 8px rgb(59 130 246 / 0.25);
 }
 
 .btn-primary:hover:not(:disabled) {
   background-position: right center;
-  box-shadow: var(--shadow-glow);
+  box-shadow: var(--shadow-glow), 0 2px 8px rgb(59 130 246 / 0.25);
   transform: translateY(-1px);
 }
 
@@ -392,7 +393,7 @@ button:focus-visible,
   background-color: var(--color-accent-subtle);
   border-color: var(--color-accent-hover);
   color: var(--color-accent-hover);
-  box-shadow: 0 0 16px rgb(99 102 241 / 0.12);
+  box-shadow: 0 0 16px rgb(59 130 246 / 0.12);
 }
 
 /* ── Ghost ── */
@@ -602,7 +603,7 @@ pre {
 .card:hover {
   box-shadow: var(--shadow-md);
   border-color: var(--color-border-hover);
-  transform: translateY(-4px);
+  transform: translateY(-4px) scale(1.015);
 }
 
 .card:hover::before {
@@ -789,14 +790,21 @@ pre {
   text-transform: uppercase;
   padding: 0.2rem 0.6rem;
   border-radius: var(--radius-sm);
-  border: 1px solid rgb(99 102 241 / 0.15);
+  border: 1px solid rgb(59 130 246 / 0.15);
   white-space: nowrap;
-  transition: all var(--transition-fast);
+  transition:
+    background-color var(--transition-fast),
+    border-color     var(--transition-fast),
+    color            var(--transition-fast),
+    transform        var(--transition-fast),
+    box-shadow       var(--transition-fast);
 }
 
 .tag:hover {
-  background-color: rgb(99 102 241 / 0.18);
-  border-color: rgb(99 102 241 / 0.3);
+  background-color: rgb(59 130 246 / 0.18);
+  border-color: rgb(59 130 246 / 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgb(59 130 246 / 0.1);
 }
 
 .tag-group {
@@ -1010,4 +1018,130 @@ pre {
   background: var(--color-accent-2);
   bottom: -200px;
   left: -100px;
+}
+
+/* ===================================================
+   Scroll Fade-in (directive: appScrollFade)
+   =================================================== */
+
+.scroll-fade {
+  opacity: 0;
+  transition:
+    opacity 0.6s cubic-bezier(0.0, 0.0, 0.2, 1),
+    transform 0.6s cubic-bezier(0.0, 0.0, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+.scroll-fade--up    { transform: translateY(24px); }
+.scroll-fade--down  { transform: translateY(-24px); }
+.scroll-fade--left  { transform: translateX(24px); }
+.scroll-fade--right { transform: translateX(-24px); }
+.scroll-fade--none  { transform: none; }
+
+.scroll-fade--visible {
+  opacity: 1;
+  transform: translateY(0) translateX(0);
+}
+
+/* ===================================================
+   Button Loading Spinner
+   =================================================== */
+
+.btn-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgb(255 255 255 / 0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: btn-spin 0.6s linear infinite;
+}
+
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===================================================
+   Link Micro-interactions
+   =================================================== */
+
+.link-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 2px;
+  background: var(--color-accent);
+  border-radius: 1px;
+  transition: width var(--transition-fast);
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}
+
+/* ===================================================
+   Tooltip
+   =================================================== */
+
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  padding: 0.35rem 0.625rem;
+  background-color: var(--color-surface-raised);
+  color: var(--color-text);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  white-space: nowrap;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
+  z-index: 50;
+}
+
+[data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ===================================================
+   Reduced Motion (enhanced)
+   =================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-fade {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .btn-spinner {
+    animation: none;
+  }
+
+  [data-tooltip]::after {
+    transition: none;
+  }
+
+  .link-underline::after {
+    transition: none;
+  }
 }

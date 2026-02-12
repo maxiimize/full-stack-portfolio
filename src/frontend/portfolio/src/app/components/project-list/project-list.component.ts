@@ -3,11 +3,14 @@ import { CommonModule } from '@angular/common';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project.model';
 import { SkeletonCardComponent } from '../skeleton-card/skeleton-card.component';
+import { ScrollFadeDirective } from '../../shared';
+import { staggerList, fadeSlide } from '../../animations';
 
 @Component({
   selector: 'app-project-list',
   standalone: true,
-  imports: [CommonModule, SkeletonCardComponent],
+  imports: [CommonModule, SkeletonCardComponent, ScrollFadeDirective],
+  animations: [staggerList, fadeSlide],
   templateUrl: './project-list.component.html',
   styleUrl: './project-list.component.css',
 })

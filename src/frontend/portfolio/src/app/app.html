@@ -1,5 +1,6 @@
 <app-header />
-<main class="app-main">
+<main class="app-main" [@routeAnimation]="getRouteAnimationData()">
   <router-outlet />
 </main>
 <app-footer />
+<app-toast-container />
