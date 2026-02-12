@@ -20,7 +20,7 @@
 </section>
 
 <!-- Projects Grid -->
-<section class="projects-section container">
+<section class="projects-section container" appScrollFade>
   <div class="section-header">
     <h2 class="section-title">Featured Projects</h2>
     <div class="section-line" aria-hidden="true"></div>
@@ -33,7 +33,7 @@
   }
 
   @if (error(); as err) {
-    <div class="error-state animate-scale-in">
+    <div class="error-state" @fadeSlide>
       <div class="error-icon" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="48" height="48">
           <circle cx="12" cy="12" r="10"/>
@@ -47,7 +47,7 @@
   }
 
   @if (!loading() && !error() && projects().length === 0) {
-    <div class="empty-state animate-scale-in">
+    <div class="empty-state" @fadeSlide>
       <div class="empty-icon" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="48" height="48">
           <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
@@ -59,7 +59,7 @@
     </div>
   }
 
-  <div class="card-grid stagger-children">
+  <div class="card-grid" @staggerList>
     @for (project of projects(); track project.id) {
       <article class="card">
         @if (project.screenshots.length > 0) {

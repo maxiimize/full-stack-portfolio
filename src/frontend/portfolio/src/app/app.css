@@ -6,4 +6,5 @@
 
 .app-main {
   position: relative;
+  overflow: hidden;
 }

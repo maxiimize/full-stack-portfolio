@@ -3,10 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from '../../models/auth.model';
+import { scaleIn, fadeSlide } from '../../animations';
 
 @Component({
   selector: 'app-login',
   imports: [FormsModule, RouterLink],
+  animations: [scaleIn, fadeSlide],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
