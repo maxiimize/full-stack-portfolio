@@ -71,6 +71,17 @@ if (app.Environment.IsDevelopment())
     await DbInitializer.SeedAsync(scope.ServiceProvider);
 }
 
+// Serve uploaded screenshots from /uploads
+var uploadsRoot = Environment.GetEnvironmentVariable("UPLOADS_PATH")
+    ?? Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+Directory.CreateDirectory(uploadsRoot);
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(uploadsRoot),
+    RequestPath = "/uploads"
+});
+
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
 app.UseAuthentication();

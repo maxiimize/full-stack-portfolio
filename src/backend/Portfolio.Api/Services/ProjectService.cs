@@ -194,6 +194,46 @@ public class ProjectService : IProjectService
         return new ScreenshotDto(screenshot.Url, screenshot.AltText, screenshot.SortOrder);
     }
 
+    public async Task DeleteScreenshotAsync(int projectId, int screenshotId)
+    {
+        var screenshot = await _context.Screenshots
+            .FirstOrDefaultAsync(s => s.Id == screenshotId && s.ProjectId == projectId)
+            ?? throw new KeyNotFoundException($"Screenshot with id {screenshotId} not found for project {projectId}.");
+
+        // Delete the physical file
+        var uploadsRoot = Environment.GetEnvironmentVariable("UPLOADS_PATH")
+            ?? Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+        var filePath = Path.Combine(uploadsRoot, screenshot.Url.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
+            .Replace("uploads" + Path.DirectorySeparatorChar, ""));
+        if (File.Exists(filePath))
+            File.Delete(filePath);
+
+        _context.Screenshots.Remove(screenshot);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<ScreenshotDto>> ReorderScreenshotsAsync(int projectId, List<int> screenshotIds)
+    {
+        var project = await _context.Projects
+            .Include(p => p.Screenshots)
+            .FirstOrDefaultAsync(p => p.Id == projectId)
+            ?? throw new KeyNotFoundException($"Project with id {projectId} not found.");
+
+        for (var i = 0; i < screenshotIds.Count; i++)
+        {
+            var screenshot = project.Screenshots.FirstOrDefault(s => s.Id == screenshotIds[i])
+                ?? throw new KeyNotFoundException($"Screenshot with id {screenshotIds[i]} not found for project {projectId}.");
+            screenshot.SortOrder = i;
+        }
+
+        await _context.SaveChangesAsync();
+
+        return project.Screenshots
+            .OrderBy(s => s.SortOrder)
+            .Select(s => new ScreenshotDto(s.Url, s.AltText, s.SortOrder))
+            .ToList();
+    }
+
     private static ProjectResponse ToResponse(Project project) => new(
         project.Id,
         project.Title,
