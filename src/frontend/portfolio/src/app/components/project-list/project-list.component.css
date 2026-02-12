@@ -198,3 +198,64 @@
   color: var(--color-text-muted);
   font-size: var(--text-sm);
 }
+
+/* ── Screenshot Carousel ── */
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: rgb(0 0 0 / 0.45);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.15s;
+  backdrop-filter: blur(4px);
+}
+
+.card:hover .carousel-btn {
+  opacity: 1;
+}
+
+.carousel-btn:hover {
+  background: rgb(0 0 0 / 0.7);
+}
+
+.carousel-btn--prev {
+  left: 8px;
+}
+
+.carousel-btn--next {
+  right: 8px;
+}
+
+.carousel-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  gap: 5px;
+}
+
+.carousel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.4);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.carousel-dot--active {
+  background: #fff;
+  transform: scale(1.3);
+}

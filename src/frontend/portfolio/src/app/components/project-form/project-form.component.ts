@@ -178,6 +178,10 @@ export class ProjectFormComponent implements OnInit {
   /* ------------------------------------------------------------------ */
 
   onSubmit(): void {
+    if (this.isEditMode && !confirm('Save changes to this project?')) {
+      return;
+    }
+
     this.errorMessage.set(null);
     this.successMessage.set(null);
     this.saving.set(true);
@@ -205,6 +209,8 @@ export class ProjectFormComponent implements OnInit {
             this.uploadPendingFiles();
           }
           this.successMessage.set('Project updated successfully.');
+          // Scroll to top so the user sees the success message
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         },
         error: (err) => {
           this.saving.set(false);

@@ -19,8 +19,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
         builder.UseSetting("UPLOADS_PATH", UploadsPath);
 
-        Environment.SetEnvironmentVariable("UPLOADS_PATH", UploadsPath);
-
         builder.ConfigureServices(services =>
         {
             // Remove all DbContext and EF Core registrations to avoid provider conflicts

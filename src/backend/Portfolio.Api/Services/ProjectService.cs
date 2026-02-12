@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Portfolio.Api.Data;
 using Portfolio.Api.DTOs;
 using Portfolio.Api.Models;
@@ -8,10 +9,13 @@ namespace Portfolio.Api.Services;
 public class ProjectService : IProjectService
 {
     private readonly AppDbContext _context;
+    private readonly string _uploadsRoot;
 
-    public ProjectService(AppDbContext context)
+    public ProjectService(AppDbContext context, IConfiguration configuration)
     {
         _context = context;
+        _uploadsRoot = configuration["UPLOADS_PATH"]
+            ?? Path.Combine(Directory.GetCurrentDirectory(), "uploads");
     }
 
     public async Task<PagedResult<ProjectResponse>> GetAllAsync(int page = 1, int pageSize = 10, string? tag = null)
@@ -170,8 +174,7 @@ public class ProjectService : IProjectService
         var project = await _context.Projects.FindAsync(projectId)
             ?? throw new KeyNotFoundException($"Project with id {projectId} not found.");
 
-        var uploadsRoot = Environment.GetEnvironmentVariable("UPLOADS_PATH") ?? Path.Combine(Directory.GetCurrentDirectory(), "uploads");
-        var projectDir = Path.Combine(uploadsRoot, projectId.ToString());
+        var projectDir = Path.Combine(_uploadsRoot, projectId.ToString());
         Directory.CreateDirectory(projectDir);
 
         var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
@@ -201,9 +204,7 @@ public class ProjectService : IProjectService
             ?? throw new KeyNotFoundException($"Screenshot with id {screenshotId} not found for project {projectId}.");
 
         // Delete the physical file
-        var uploadsRoot = Environment.GetEnvironmentVariable("UPLOADS_PATH")
-            ?? Path.Combine(Directory.GetCurrentDirectory(), "uploads");
-        var filePath = Path.Combine(uploadsRoot, screenshot.Url.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
+        var filePath = Path.Combine(_uploadsRoot, screenshot.Url.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
             .Replace("uploads" + Path.DirectorySeparatorChar, ""));
         if (File.Exists(filePath))
             File.Delete(filePath);

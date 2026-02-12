@@ -16,10 +16,29 @@ export class ProjectListComponent implements OnInit {
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
 
+  /** Tracks the active screenshot index per project id */
+  activeScreenshot: Record<number, number> = {};
+
   constructor(private readonly projectService: ProjectService) {}
 
   resolveUrl(url: string): string {
     return this.projectService.resolveScreenshotUrl(url);
+  }
+
+  getActiveIndex(projectId: number): number {
+    return this.activeScreenshot[projectId] ?? 0;
+  }
+
+  prevScreenshot(projectId: number, total: number, event: Event): void {
+    event.stopPropagation();
+    const current = this.getActiveIndex(projectId);
+    this.activeScreenshot[projectId] = current > 0 ? current - 1 : total - 1;
+  }
+
+  nextScreenshot(projectId: number, total: number, event: Event): void {
+    event.stopPropagation();
+    const current = this.getActiveIndex(projectId);
+    this.activeScreenshot[projectId] = current < total - 1 ? current + 1 : 0;
   }
 
   ngOnInit(): void {

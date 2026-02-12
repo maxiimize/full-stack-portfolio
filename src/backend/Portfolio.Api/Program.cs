@@ -72,7 +72,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // Serve uploaded screenshots from /uploads
-var uploadsRoot = Environment.GetEnvironmentVariable("UPLOADS_PATH")
+var uploadsRoot = app.Configuration["UPLOADS_PATH"]
     ?? Path.Combine(Directory.GetCurrentDirectory(), "uploads");
 Directory.CreateDirectory(uploadsRoot);
 
