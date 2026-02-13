@@ -40,10 +40,19 @@ export class LoginComponent {
       },
       error: (err) => {
         this.loading.set(false);
-        this.errorMessage.set(
-          err.error?.message ?? err.error ?? 'Login failed. Please try again.',
-        );
+        this.errorMessage.set(this.extractError(err));
       },
     });
+  }
+
+  private extractError(err: any): string {
+    const body = err.error;
+    if (!body) return 'Login failed. Please try again.';
+    if (typeof body === 'string') return body;
+    if (body.title && body.errors) {
+      const messages = Object.values<string[]>(body.errors).flat();
+      return messages.join(' ');
+    }
+    return body.message ?? body.title ?? 'Login failed. Please try again.';
   }
 }
