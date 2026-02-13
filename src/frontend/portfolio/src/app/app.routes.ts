@@ -12,6 +12,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'register',
+    loadComponent: () =>
+      import('./components/register/register.component').then(
+        (m) => m.RegisterComponent
+      ),
+  },
+  {
     path: 'projects',
     loadComponent: () =>
       import('./components/project-list/project-list.component').then(

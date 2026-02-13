@@ -2,19 +2,21 @@ import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { LoginRequest } from '../../models/auth.model';
+import { RegisterRequest } from '../../models/auth.model';
 import { scaleIn, fadeSlide } from '../../animations';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   imports: [FormsModule, RouterLink],
   animations: [scaleIn, fadeSlide],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.css',
 })
-export class LoginComponent {
+export class RegisterComponent {
+  userName = '';
   email = '';
   password = '';
+  confirmPassword = '';
 
   readonly loading = signal(false);
   readonly errorMessage = signal<string | null>(null);
@@ -24,16 +26,27 @@ export class LoginComponent {
     private readonly router: Router,
   ) {}
 
+  get passwordsMatch(): boolean {
+    return this.password === this.confirmPassword;
+  }
+
   onSubmit(): void {
     this.errorMessage.set(null);
+
+    if (!this.passwordsMatch) {
+      this.errorMessage.set('Passwords do not match.');
+      return;
+    }
+
     this.loading.set(true);
 
-    const request: LoginRequest = {
+    const request: RegisterRequest = {
+      userName: this.userName,
       email: this.email,
       password: this.password,
     };
 
-    this.authService.login(request).subscribe({
+    this.authService.register(request).subscribe({
       next: () => {
         this.loading.set(false);
         this.router.navigate(['/projects']);
@@ -47,12 +60,12 @@ export class LoginComponent {
 
   private extractError(err: any): string {
     const body = err.error;
-    if (!body) return 'Login failed. Please try again.';
+    if (!body) return 'Registration failed. Please try again.';
     if (typeof body === 'string') return body;
     if (body.title && body.errors) {
       const messages = Object.values<string[]>(body.errors).flat();
       return messages.join(' ');
     }
-    return body.message ?? body.title ?? 'Login failed. Please try again.';
+    return body.message ?? body.title ?? 'Registration failed. Please try again.';
   }
 }
