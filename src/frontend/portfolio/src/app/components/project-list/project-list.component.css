@@ -163,11 +163,15 @@
 }
 
 .hero-cta-text {
+  display: block;
+  width: 100%;
   margin-top: var(--space-4);
+  margin-inline: auto;
   font-size: var(--text-xs);
   color: var(--color-text-muted);
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
+  text-align: center;
   opacity: 0.5;
   animation: hero-fade-up 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.44s both;
 }
