@@ -1,0 +1,133 @@
+@if (phase() !== 'done') {
+<div class="intro-overlay" [class.exiting]="phase() === 'exiting'">
+
+  <!-- ── Ambient light pools ── -->
+  <div class="ambient-glow" aria-hidden="true"></div>
+
+  <!-- ── Starfield ── -->
+  <div class="starfield" aria-hidden="true">
+    @for (star of stars; track star.id) {
+      <span
+        class="star"
+        [style.left]="star.left"
+        [style.top]="star.top"
+        [style.width]="star.size"
+        [style.height]="star.size"
+        [style.animation-delay]="star.delay"
+        [style.animation-duration]="star.duration"
+        [style.--max-opacity]="star.maxOpacity">
+      </span>
+    }
+  </div>
+
+  <!-- ── Vapor trail (SVG – three layers for glow depth) ── -->
+  <svg class="trail-svg" viewBox="0 0 1200 800" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="trailGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="#3B82F6" stop-opacity="0" />
+        <stop offset="15%"  stop-color="#3B82F6" stop-opacity="0.4" />
+        <stop offset="45%"  stop-color="#8B5CF6" stop-opacity="0.7" />
+        <stop offset="75%"  stop-color="#06B6D4" stop-opacity="0.9" />
+        <stop offset="100%" stop-color="#22D3EE" stop-opacity="1" />
+      </linearGradient>
+
+      <filter id="trailGlowWide" x="-20%" y="-40%" width="140%" height="180%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="14" />
+      </filter>
+
+      <filter id="trailGlowMid" x="-20%" y="-40%" width="140%" height="180%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+
+    <!-- Wide glow -->
+    <path class="trail-path trail-wide"
+          d="M -96 496 C 240 600, 720 160, 1296 -64"
+          fill="none" stroke="url(#trailGrad)" stroke-width="22"
+          stroke-linecap="round" filter="url(#trailGlowWide)" opacity="0.35" />
+
+    <!-- Medium glow -->
+    <path class="trail-path trail-mid"
+          d="M -96 496 C 240 600, 720 160, 1296 -64"
+          fill="none" stroke="url(#trailGrad)" stroke-width="7"
+          stroke-linecap="round" filter="url(#trailGlowMid)" />
+
+    <!-- Sharp core -->
+    <path class="trail-path trail-core"
+          d="M -96 496 C 240 600, 720 160, 1296 -64"
+          fill="none" stroke="url(#trailGrad)" stroke-width="2.5"
+          stroke-linecap="round" />
+  </svg>
+
+  <!-- ── Sparkle particles ── -->
+  <div class="particles" aria-hidden="true">
+    @for (p of particles; track p.id) {
+      <span
+        class="particle"
+        [style.left]="p.left"
+        [style.top]="p.top"
+        [style.width]="p.size"
+        [style.height]="p.size"
+        [style.animation-delay]="p.delay"
+        [style.--drift]="p.drift">
+      </span>
+    }
+  </div>
+
+  <!-- ── Sonic ripples ── -->
+  <div class="sonic-ripple ripple-1" aria-hidden="true"></div>
+  <div class="sonic-ripple ripple-2" aria-hidden="true"></div>
+  <div class="sonic-ripple ripple-3" aria-hidden="true"></div>
+
+  <!-- ── Airplane ── -->
+  <div class="airplane-container" aria-hidden="true">
+    <!-- Radial glow halo -->
+    <div class="airplane-glow"></div>
+
+    <!-- Paper airplane SVG -->
+    <svg class="airplane-svg" viewBox="0 0 120 60" fill="none">
+      <defs>
+        <linearGradient id="planeUpper" x1="0" y1="30" x2="110" y2="5" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="#DBEAFE" />
+          <stop offset="100%" stop-color="#93C5FD" />
+        </linearGradient>
+        <linearGradient id="planeLower" x1="0" y1="30" x2="110" y2="55" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="#93C5FD" />
+          <stop offset="100%" stop-color="#3B82F6" />
+        </linearGradient>
+        <filter id="planeShadow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
+        </filter>
+      </defs>
+
+      <!-- Soft glow silhouette -->
+      <polygon points="2,30 110,5 68,30 110,55"
+               fill="#60A5FA" opacity="0.35" filter="url(#planeShadow)" />
+
+      <!-- Upper wing -->
+      <polygon points="2,30 110,5 68,30" fill="url(#planeUpper)" />
+
+      <!-- Lower wing -->
+      <polygon points="2,30 68,30 110,55" fill="url(#planeLower)" />
+
+      <!-- Center fold -->
+      <line x1="68" y1="30" x2="110" y2="30"
+            stroke="#DBEAFE" stroke-width="0.7" opacity="0.35" />
+
+      <!-- Upper highlight -->
+      <polygon points="10,29.5 100,8 68,28.5" fill="white" opacity="0.12" />
+
+      <!-- Leading-edge gleam -->
+      <line x1="2" y1="30" x2="110" y2="5"
+            stroke="white" stroke-width="0.5" opacity="0.2" />
+    </svg>
+  </div>
+
+  <!-- ── Vignette ── -->
+  <div class="vignette" aria-hidden="true"></div>
+</div>
+}

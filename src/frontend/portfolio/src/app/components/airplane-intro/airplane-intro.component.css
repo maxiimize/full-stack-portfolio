@@ -1,0 +1,350 @@
+/* =============================================================
+   Airplane Intro – Full-screen cinematic splash
+   ============================================================= */
+
+/* ── Overlay ───────────────────────────────────────────────── */
+
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: var(--color-bg, #0a0f1e);
+  overflow: hidden;
+  transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+.intro-overlay.exiting {
+  opacity: 0;
+  transform: translateY(-4%) scale(1.03);
+  pointer-events: none;
+}
+
+/* ── Ambient glow ──────────────────────────────────────────── */
+
+.ambient-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 25% 75%, rgba(59, 130, 246, 0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 75% 25%, rgba(139, 92, 246, 0.05) 0%, transparent 55%);
+  opacity: 0;
+  animation: ambient-fade 3.2s ease-in-out forwards;
+  pointer-events: none;
+}
+
+@keyframes ambient-fade {
+  0%   { opacity: 0; }
+  25%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── Vignette ──────────────────────────────────────────────── */
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.45) 100%);
+  pointer-events: none;
+}
+
+/* ── Starfield ─────────────────────────────────────────────── */
+
+.starfield {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: white;
+  opacity: 0;
+  will-change: opacity, transform;
+  animation: star-twinkle var(--duration, 2s) ease-in-out infinite;
+}
+
+@keyframes star-twinkle {
+  0%, 100% {
+    opacity: 0.05;
+    transform: scale(0.6);
+  }
+  50% {
+    opacity: var(--max-opacity, 0.5);
+    transform: scale(1.2);
+  }
+}
+
+/* ── Vapor trail (SVG) ─────────────────────────────────────── */
+
+.trail-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.trail-path {
+  stroke-dasharray: 1800;
+  stroke-dashoffset: 1800;
+}
+
+.trail-wide {
+  animation:
+    draw-trail 2.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards,
+    fade-trail 0.9s ease-in 2.3s forwards;
+}
+
+.trail-mid {
+  animation:
+    draw-trail 2.1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.35s forwards,
+    fade-trail 0.8s ease-in 2.35s forwards;
+}
+
+.trail-core {
+  animation:
+    draw-trail 2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.38s forwards,
+    fade-trail 0.7s ease-in 2.4s forwards;
+}
+
+@keyframes draw-trail {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes fade-trail {
+  to { opacity: 0; }
+}
+
+/* ── Sparkle particles ─────────────────────────────────────── */
+
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #bfdbfe 0%, #3b82f6 70%, transparent 100%);
+  opacity: 0;
+  box-shadow: 0 0 6px 2px rgba(59, 130, 246, 0.35);
+  will-change: transform, opacity;
+  animation: particle-burst 1s ease-out forwards;
+}
+
+@keyframes particle-burst {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.2);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--drift, 10px), -35px) scale(0);
+  }
+}
+
+/* ── Sonic ripples ─────────────────────────────────────────── */
+
+.sonic-ripple {
+  position: absolute;
+  left: 46%;
+  top: 44%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(59, 130, 246, 0.3);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ripple-1 { animation: ripple-expand 1.5s ease-out 1.2s forwards; }
+.ripple-2 { animation: ripple-expand 1.5s ease-out 1.38s forwards; }
+.ripple-3 { animation: ripple-expand 1.5s ease-out 1.56s forwards; }
+
+@keyframes ripple-expand {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.55;
+    border-width: 3px;
+  }
+  100% {
+    width: 65vmin;
+    height: 65vmin;
+    opacity: 0;
+    border-width: 0.5px;
+  }
+}
+
+/* ── Airplane ──────────────────────────────────────────────── */
+
+.airplane-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 110px;
+  height: 56px;
+  margin-left: -55px;
+  margin-top: -28px;
+  pointer-events: none;
+  will-change: transform, opacity;
+  opacity: 0;
+  animation: airplane-swoosh 2.3s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
+}
+
+/* Speed-streak lines trailing behind the plane */
+.airplane-container::before,
+.airplane-container::after {
+  content: '';
+  position: absolute;
+  right: 82%;
+  height: 1.5px;
+  border-radius: 1px;
+  background: linear-gradient(to right, transparent, rgba(147, 197, 253, 0.45));
+  opacity: 0;
+  animation: speed-lines 2.3s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
+}
+
+.airplane-container::before {
+  top: 35%;
+  width: 34px;
+}
+
+.airplane-container::after {
+  top: 58%;
+  width: 22px;
+}
+
+@keyframes speed-lines {
+  0%        { opacity: 0; }
+  8%, 88%   { opacity: 1; }
+  100%      { opacity: 0; }
+}
+
+/* Radial glow halo around the plane */
+.airplane-glow {
+  position: absolute;
+  inset: -28px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(59, 130, 246, 0.28) 0%,
+    rgba(59, 130, 246, 0.08) 45%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: glow-pulse 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes glow-pulse {
+  0%   { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 1;   transform: scale(1.2); }
+}
+
+/* SVG paper airplane */
+.airplane-svg {
+  width: 100%;
+  height: 100%;
+  filter:
+    drop-shadow(0 0 10px rgba(59, 130, 246, 0.55))
+    drop-shadow(0 0 25px rgba(59, 130, 246, 0.2));
+}
+
+/* ── Airplane flight path ──────────────────────────────────── */
+/*
+   The plane enters bottom-left, dips slightly (banking),
+   then sweeps upward in a graceful climb and exits top-right.
+   All positioning via GPU-friendly transform: translate().
+*/
+
+@keyframes airplane-swoosh {
+  0% {
+    transform: translate(-12vw, 60vh) rotate(12deg) scale(0.35);
+    opacity: 0;
+  }
+  4% {
+    opacity: 1;
+  }
+  12% {
+    transform: translate(8vw, 68vh) rotate(5deg) scale(0.72);
+  }
+  26% {
+    transform: translate(24vw, 62vh) rotate(-10deg) scale(0.92);
+  }
+  45% {
+    transform: translate(44vw, 44vh) rotate(-22deg) scale(1.1);
+  }
+  62% {
+    transform: translate(60vw, 28vh) rotate(-30deg) scale(1.08);
+  }
+  78% {
+    transform: translate(76vw, 14vh) rotate(-36deg) scale(1);
+  }
+  92% {
+    transform: translate(90vw, 3vh) rotate(-41deg) scale(0.92);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(112vw, -14vh) rotate(-47deg) scale(0.75);
+    opacity: 0;
+  }
+}
+
+/* ── Responsive tweaks ─────────────────────────────────────── */
+
+@media (min-width: 1200px) {
+  .airplane-container {
+    width: 150px;
+    height: 77px;
+    margin-left: -75px;
+    margin-top: -38px;
+  }
+
+  .airplane-container::before { width: 48px; }
+  .airplane-container::after  { width: 32px; }
+}
+
+@media (max-width: 640px) {
+  .airplane-container {
+    width: 76px;
+    height: 39px;
+    margin-left: -38px;
+    margin-top: -19px;
+  }
+
+  .airplane-container::before { width: 22px; }
+  .airplane-container::after  { width: 14px; }
+
+  .sonic-ripple { display: none; }
+}
+
+/* ── Accessibility: reduce motion ──────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-overlay {
+    animation: simple-fade 0.6s ease-out forwards;
+  }
+
+  .airplane-container,
+  .trail-path,
+  .particle,
+  .sonic-ripple,
+  .star,
+  .ambient-glow {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  @keyframes simple-fade {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+  }
+}
