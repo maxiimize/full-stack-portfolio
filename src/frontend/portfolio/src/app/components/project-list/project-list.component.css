@@ -29,20 +29,8 @@
 
 .hero {
   position: relative;
-  overflow: hidden;
   padding: var(--space-20) 0 var(--space-16);
   text-align: center;
-}
-
-.hero::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 120px;
-  background: linear-gradient(to bottom, transparent, var(--color-bg));
-  pointer-events: none;
 }
 
 @media (min-width: 640px) {
@@ -53,9 +41,11 @@
 
 .hero-bg {
   position: absolute;
-  inset: 0;
+  inset: -20px 0 0;          /* let orbs bleed slightly above */
   pointer-events: none;
-  overflow: hidden;
+  overflow: visible;
+  mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
 }
 
 .hero-orb {
