@@ -189,16 +189,24 @@
 
 .airplane-container {
   position: absolute;
-  top: 0;
-  left: 0;
   width: 110px;
   height: 56px;
+  /* Centre the element on the path point */
   margin-left: -55px;
   margin-top: -28px;
   pointer-events: none;
-  will-change: transform, opacity;
+  will-change: offset-distance, transform, opacity;
   opacity: 0;
-  animation: airplane-swoosh 2.3s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
+
+  /* offset-path is set dynamically via [style.offset-path] binding.
+     offset-rotate: auto keeps the nose tangent to the curve;
+     the -15deg offset tilts it slightly nose-up for style. */
+  offset-rotate: auto -15deg;
+  offset-anchor: center center;
+}
+
+.airplane-container.ready {
+  animation: fly-along-path 2.3s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
 }
 
 /* Speed-streak lines trailing behind the plane */
@@ -211,6 +219,10 @@
   border-radius: 1px;
   background: linear-gradient(to right, transparent, rgba(147, 197, 253, 0.45));
   opacity: 0;
+}
+
+.airplane-container.ready::before,
+.airplane-container.ready::after {
   animation: speed-lines 2.3s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
 }
 
@@ -258,43 +270,41 @@
     drop-shadow(0 0 25px rgba(59, 130, 246, 0.2));
 }
 
-/* ── Airplane flight path ──────────────────────────────────── */
+/* ── Airplane flight path (offset-distance along bezier) ──── */
 /*
-   The plane enters bottom-left, dips slightly (banking),
-   then sweeps upward in a graceful climb and exits top-right.
-   All positioning via GPU-friendly transform: translate().
+   offset-distance smoothly interpolates from 0% → 100% along
+   the true cubic bezier set via offset-path, giving buttery
+   continuous motion instead of linear keyframe segments.
+   Rotation is handled by offset-rotate: auto.
+   Scale & opacity are animated independently via transform.
 */
 
-@keyframes airplane-swoosh {
+@keyframes fly-along-path {
+  /*  offset-distance is ONLY at 0% and 100% so the easing
+      function applies as one unbroken curve — no mid-path hitch. */
   0% {
-    transform: translate(-12vw, 60vh) rotate(12deg) scale(0.35);
+    offset-distance: 0%;
     opacity: 0;
+    transform: scale(0.3);
   }
-  4% {
+  6% {
     opacity: 1;
+    transform: scale(0.6);
   }
-  12% {
-    transform: translate(8vw, 68vh) rotate(5deg) scale(0.72);
+  40% {
+    transform: scale(1.05);
   }
-  26% {
-    transform: translate(24vw, 62vh) rotate(-10deg) scale(0.92);
+  60% {
+    transform: scale(1.1);
   }
-  45% {
-    transform: translate(44vw, 44vh) rotate(-22deg) scale(1.1);
-  }
-  62% {
-    transform: translate(60vw, 28vh) rotate(-30deg) scale(1.08);
-  }
-  78% {
-    transform: translate(76vw, 14vh) rotate(-36deg) scale(1);
-  }
-  92% {
-    transform: translate(90vw, 3vh) rotate(-41deg) scale(0.92);
+  88% {
     opacity: 1;
+    transform: scale(0.95);
   }
   100% {
-    transform: translate(112vw, -14vh) rotate(-47deg) scale(0.75);
+    offset-distance: 100%;
     opacity: 0;
+    transform: scale(0.7);
   }
 }
 

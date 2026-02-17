@@ -84,7 +84,10 @@
   <div class="sonic-ripple ripple-3" aria-hidden="true"></div>
 
   <!-- ── Airplane ── -->
-  <div class="airplane-container" aria-hidden="true">
+  <div class="airplane-container"
+       [class.ready]="!!flightPath()"
+       [style.offset-path]="airplaneOffsetPath()"
+       aria-hidden="true">
     <!-- Radial glow halo -->
     <div class="airplane-glow"></div>
 

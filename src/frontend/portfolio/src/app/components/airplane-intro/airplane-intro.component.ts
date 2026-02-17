@@ -2,6 +2,7 @@ import {
   Component,
   output,
   signal,
+  computed,
   afterNextRender,
   ChangeDetectionStrategy,
 } from '@angular/core';
@@ -36,11 +37,24 @@ export class AirplaneIntroComponent {
   readonly animationComplete = output<void>();
 
   protected readonly phase = signal<'playing' | 'exiting' | 'done'>('playing');
+  protected readonly flightPath = signal<string>('');
   protected readonly stars: Star[] = this.generateStars(60);
   protected readonly particles: Particle[] = this.generateParticles(26);
 
+  /**
+   * CSS `offset-path` value computed from viewport dimensions.
+   * Maps the SVG viewBox (1200×800) bezier to real pixel coordinates
+   * so the airplane follows the exact same curve as the vapor trail.
+   */
+  protected readonly airplaneOffsetPath = computed(() => {
+    const p = this.flightPath();
+    return p ? `path('${p}')` : 'none';
+  });
+
   constructor() {
     afterNextRender(() => {
+      this.computeFlightPath();
+
       // Begin exit fade after airplane has crossed the screen
       setTimeout(() => this.phase.set('exiting'), 2700);
       // Fully done — remove from DOM
@@ -49,6 +63,22 @@ export class AirplaneIntroComponent {
         this.animationComplete.emit();
       }, 3700);
     });
+  }
+
+  /**
+   * Convert the SVG trail bezier (viewBox 1200×800, preserveAspectRatio="none")
+   * into viewport-pixel coordinates so CSS offset-path traces the identical curve.
+   */
+  private computeFlightPath(): void {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const mx = (x: number) => Math.round(((x / 1200) * vw) * 100) / 100;
+    const my = (y: number) => Math.round(((y / 800) * vh) * 100) / 100;
+
+    // Original SVG path: M -96 496 C 240 600, 720 160, 1296 -64
+    this.flightPath.set(
+      `M ${mx(-96)} ${my(496)} C ${mx(240)} ${my(600)}, ${mx(720)} ${my(160)}, ${mx(1296)} ${my(-64)}`
+    );
   }
 
   // ── Helpers ──────────────────────────────────────────
