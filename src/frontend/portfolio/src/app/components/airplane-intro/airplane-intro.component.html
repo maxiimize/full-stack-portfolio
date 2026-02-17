@@ -91,42 +91,129 @@
     <!-- Radial glow halo -->
     <div class="airplane-glow"></div>
 
-    <!-- Paper airplane SVG -->
-    <svg class="airplane-svg" viewBox="0 0 120 60" fill="none">
+    <!-- Jet airplane SVG -->
+    <svg class="airplane-svg" viewBox="0 0 200 100" fill="none">
       <defs>
-        <linearGradient id="planeUpper" x1="0" y1="30" x2="110" y2="5" gradientUnits="userSpaceOnUse">
-          <stop offset="0%"   stop-color="#DBEAFE" />
-          <stop offset="100%" stop-color="#93C5FD" />
+        <!-- Fuselage gradient - bright so it pops against dark bg -->
+        <linearGradient id="fuselageGrad" x1="0" y1="32" x2="0" y2="62" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="#EFF6FF" />
+          <stop offset="40%"  stop-color="#BFDBFE" />
+          <stop offset="100%" stop-color="#60A5FA" />
         </linearGradient>
-        <linearGradient id="planeLower" x1="0" y1="30" x2="110" y2="55" gradientUnits="userSpaceOnUse">
-          <stop offset="0%"   stop-color="#93C5FD" />
+        <!-- Wing gradient -->
+        <linearGradient id="wingGrad" x1="70" y1="20" x2="70" y2="70" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="#E0F2FE" />
           <stop offset="100%" stop-color="#3B82F6" />
         </linearGradient>
-        <filter id="planeShadow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
-        </filter>
+        <!-- Tail gradient -->
+        <linearGradient id="tailGrad" x1="20" y1="10" x2="20" y2="40" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="#BFDBFE" />
+          <stop offset="100%" stop-color="#2563EB" />
+        </linearGradient>
+        <!-- Engine exhaust -->
+        <radialGradient id="engineGlow" cx="0.2" cy="0.5" r="0.7">
+          <stop offset="0%"   stop-color="#67E8F9" stop-opacity="1" />
+          <stop offset="60%"  stop-color="#22D3EE" stop-opacity="0.5" />
+          <stop offset="100%" stop-color="#3B82F6" stop-opacity="0" />
+        </radialGradient>
       </defs>
 
-      <!-- Soft glow silhouette -->
-      <polygon points="2,30 110,5 68,30 110,55"
-               fill="#60A5FA" opacity="0.35" filter="url(#planeShadow)" />
+      <!-- === Main wings (swept delta) === -->
+      <polygon points="68,46  130,16  138,46  130,76  68,54"
+               fill="url(#wingGrad)" stroke="#93C5FD" stroke-width="0.6" />
+      <!-- Wing upper highlight -->
+      <polygon points="72,46  130,19  135,43  76,45"
+               fill="white" opacity="0.15" />
 
-      <!-- Upper wing -->
-      <polygon points="2,30 110,5 68,30" fill="url(#planeUpper)" />
+      <!-- === Fuselage === -->
+      <path d="M 184,50
+               C 184,42 180,36 174,34
+               L 34,36
+               C 24,36 16,42 16,50
+               C 16,58 24,64 34,64
+               L 174,66
+               C 180,64 184,58 184,50 Z"
+            fill="url(#fuselageGrad)"
+            stroke="#93C5FD" stroke-width="0.7" />
 
-      <!-- Lower wing -->
-      <polygon points="2,30 68,30 110,55" fill="url(#planeLower)" />
+      <!-- Fuselage belly shade -->
+      <path d="M 174,66
+               L 34,64
+               C 24,64 16,58 16,50
+               C 16,54 24,60 34,60
+               L 174,62 Z"
+            fill="#2563EB" opacity="0.25" />
 
-      <!-- Center fold -->
-      <line x1="68" y1="30" x2="110" y2="30"
-            stroke="#DBEAFE" stroke-width="0.7" opacity="0.35" />
+      <!-- Fuselage top highlight -->
+      <path d="M 174,36
+               L 36,38
+               C 26,38 20,42 20,46
+               L 174,40
+               Z"
+            fill="white" opacity="0.25" />
 
-      <!-- Upper highlight -->
-      <polygon points="10,29.5 100,8 68,28.5" fill="white" opacity="0.12" />
+      <!-- === Cockpit windshield === -->
+      <path d="M 184,47
+               C 182,42 176,38 170,38
+               L 170,47 Z"
+            fill="#0EA5E9" opacity="0.85"
+            stroke="#7DD3FC" stroke-width="0.5" />
+      <path d="M 184,47
+               C 182,42 176,38 170,38
+               L 174,41 182,46 Z"
+            fill="white" opacity="0.3" />
 
-      <!-- Leading-edge gleam -->
-      <line x1="2" y1="30" x2="110" y2="5"
-            stroke="white" stroke-width="0.5" opacity="0.2" />
+      <!-- === Nose tip === -->
+      <ellipse cx="185" cy="50" rx="3" ry="5"
+               fill="#DBEAFE" stroke="#93C5FD" stroke-width="0.4" />
+
+      <!-- === Tail fin (vertical stabilizer) === -->
+      <polygon points="26,36  42,36  36,8  20,14"
+               fill="url(#tailGrad)"
+               stroke="#93C5FD" stroke-width="0.6" />
+      <!-- Tail fin highlight -->
+      <polygon points="28,36  38,36  34,14  24,18"
+               fill="white" opacity="0.12" />
+
+      <!-- === Horizontal stabilizers === -->
+      <polygon points="22,44  48,36  48,44  26,48"
+               fill="#93C5FD" stroke="#60A5FA" stroke-width="0.4" />
+      <polygon points="22,56  48,64  48,56  26,52"
+               fill="#60A5FA" stroke="#3B82F6" stroke-width="0.4" />
+
+      <!-- === Engine nacelles under wings === -->
+      <ellipse cx="96" cy="58" rx="10" ry="4.5"
+               fill="#1E40AF" stroke="#60A5FA" stroke-width="0.5" />
+      <ellipse cx="96" cy="57" rx="9" ry="3.5"
+               fill="url(#fuselageGrad)" opacity="0.5" />
+      <ellipse cx="118" cy="55" rx="9" ry="4"
+               fill="#1E40AF" stroke="#60A5FA" stroke-width="0.5" />
+      <ellipse cx="118" cy="54" rx="8" ry="3"
+               fill="url(#fuselageGrad)" opacity="0.5" />
+
+      <!-- === Engine exhaust glow === -->
+      <ellipse cx="84" cy="58" rx="6" ry="3" fill="url(#engineGlow)" />
+      <ellipse cx="107" cy="55.5" rx="5" ry="2.5" fill="url(#engineGlow)" opacity="0.8" />
+
+      <!-- === Window strip along fuselage === -->
+      <g fill="#E0F2FE" opacity="0.55">
+        <circle cx="68"  cy="45" r="1.3" />
+        <circle cx="76"  cy="44.5" r="1.3" />
+        <circle cx="84"  cy="44" r="1.3" />
+        <circle cx="92"  cy="44" r="1.3" />
+        <circle cx="100" cy="43.5" r="1.3" />
+        <circle cx="108" cy="43.5" r="1.3" />
+        <circle cx="116" cy="43" r="1.3" />
+        <circle cx="124" cy="43" r="1.3" />
+        <circle cx="132" cy="42.5" r="1.3" />
+        <circle cx="140" cy="42.5" r="1.3" />
+        <circle cx="148" cy="42" r="1.3" />
+        <circle cx="156" cy="42" r="1.3" />
+      </g>
+
+      <!-- Fuselage center line -->
+      <line x1="184" y1="50" x2="22" y2="50"
+            stroke="#93C5FD" stroke-width="0.3" opacity="0.2" />
     </svg>
   </div>
 

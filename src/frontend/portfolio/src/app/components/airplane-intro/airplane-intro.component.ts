@@ -56,12 +56,12 @@ export class AirplaneIntroComponent {
       this.computeFlightPath();
 
       // Begin exit fade after airplane has crossed the screen
-      setTimeout(() => this.phase.set('exiting'), 2700);
+      setTimeout(() => this.phase.set('exiting'), 3700);
       // Fully done — remove from DOM
       setTimeout(() => {
         this.phase.set('done');
         this.animationComplete.emit();
-      }, 3700);
+      }, 4700);
     });
   }
 
@@ -110,7 +110,7 @@ export class AirplaneIntroComponent {
         id: i,
         left: `${x}%`,
         top: `${y + yJitter}%`,
-        delay: `${0.5 + t * 1.9}s`,
+        delay: `${0.5 + t * 2.7}s`,
         size: `${2 + Math.random() * 3}px`,
         drift: `${-25 + Math.random() * 50}px`,
       };
