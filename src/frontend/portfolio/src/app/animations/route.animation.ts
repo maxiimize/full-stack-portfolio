@@ -27,14 +27,21 @@ import { TIMING_MEDIUM, TIMING_ENTRANCE, EASE_OUT, DURATION_MEDIUM } from './tim
 
 export const routeAnimation: AnimationTriggerMetadata = trigger('routeAnimation', [
   transition('* <=> *', [
-    // Set both entering and leaving views to position absolute
-    query(':enter, :leave', [
+    // Only the leaving view is absolutely positioned so the entering view
+    // stays in normal document flow and maintains the container height.
+    // This prevents the footer from flashing into view during transitions.
+    query(':leave', [
       style({
         position: 'absolute',
         top: 0,
         left: 0,
         width: '100%',
       }),
+    ], { optional: true }),
+
+    // Hide the entering view immediately so it doesn't flash unstyled
+    query(':enter', [
+      style({ opacity: 0, transform: 'translateY(16px)' }),
     ], { optional: true }),
 
     group([
@@ -49,7 +56,6 @@ export const routeAnimation: AnimationTriggerMetadata = trigger('routeAnimation'
 
       // Entering view fades in from below
       query(':enter', [
-        style({ opacity: 0, transform: 'translateY(16px)' }),
         animate(
           TIMING_ENTRANCE,
           style({ opacity: 1, transform: 'translateY(0)' }),

@@ -1,0 +1,442 @@
+/* =============================================================
+   Airplane Intro – Horizontal skywriting reveal
+   ============================================================= */
+
+/* ── Overlay ───────────────────────────────────────────────── */
+
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: var(--color-bg, #0a0f1e);
+  overflow: hidden;
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+.intro-overlay.exiting {
+  opacity: 0;
+  transform: translateY(-3%) scale(1.02);
+  pointer-events: none;
+}
+
+/* ── Ambient glow ──────────────────────────────────────────── */
+
+.ambient-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 50%, rgb(59 130 246 / 0.08) 0%, transparent 55%),
+    radial-gradient(ellipse at 70% 40%, rgb(139 92 246 / 0.06) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 60%, rgb(6 182 212 / 0.04) 0%, transparent 50%);
+  opacity: 0;
+  animation: ambient-fade 3.5s ease-in-out forwards;
+  pointer-events: none;
+}
+
+@keyframes ambient-fade {
+  0%   { opacity: 0; }
+  30%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── Vignette ──────────────────────────────────────────────── */
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.45) 100%);
+  pointer-events: none;
+}
+
+/* ── Starfield ─────────────────────────────────────────────── */
+
+.starfield {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: white;
+  opacity: 0;
+  will-change: opacity, transform;
+  animation: star-twinkle var(--duration, 2s) ease-in-out infinite;
+}
+
+@keyframes star-twinkle {
+  0%, 100% {
+    opacity: 0.05;
+    transform: scale(0.6);
+  }
+  50% {
+    opacity: var(--max-opacity, 0.5);
+    transform: scale(1.2);
+  }
+}
+
+/* ── Horizontal smoke trail (SVG) ──────────────────────────── */
+
+.trail-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.smoke-path {
+  stroke-dasharray: 1800;
+  stroke-dashoffset: 1800;
+}
+
+.smoke-wide {
+  animation:
+    draw-smoke 3s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards,
+    fade-smoke 1.2s ease-in 3.2s forwards;
+}
+
+.smoke-core {
+  animation:
+    draw-smoke 2.9s cubic-bezier(0.22, 0.61, 0.36, 1) 0.35s forwards,
+    fade-smoke 1s ease-in 3.2s forwards;
+}
+
+@keyframes draw-smoke {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes fade-smoke {
+  to { opacity: 0; }
+}
+
+/* ── Smoke puff particles ──────────────────────────────────── */
+
+.smoke-puffs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.smoke-puff {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgb(59 130 246 / 0.25) 0%,
+    rgb(139 92 246 / 0.10) 40%,
+    transparent 70%
+  );
+  filter: blur(14px);
+  opacity: 0;
+  will-change: transform, opacity;
+  transform: translate(-50%, -50%);
+  animation: puff-rise var(--smoke-duration, 2.5s) ease-out var(--smoke-delay, 0s) forwards;
+}
+
+@keyframes puff-rise {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.15);
+  }
+  20% {
+    opacity: var(--smoke-opacity, 0.15);
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(
+      calc(-50% + var(--drift-x, 0px)),
+      calc(-50% + var(--drift-y, -20px))
+    ) scale(1.4);
+  }
+}
+
+/* ── Centered content (profile + name) ─────────────────────── */
+
+.intro-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Push content up so name center lands at ~50% viewport height.
+     Profile (160px) + gap (24px) sits above the name, so extra
+     bottom padding compensates to keep the name on the flight line. */
+  padding-bottom: 16vh;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Profile image – fades in after name is being revealed */
+.intro-profile {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: var(--space-6, 1.5rem);
+  border: 2px solid rgb(59 130 246 / 0.3);
+  box-shadow:
+    0 0 0 4px rgb(59 130 246 / 0.08),
+    var(--shadow-glow, 0 0 20px rgb(59 130 246 / 0.15));
+  opacity: 0;
+  transform: scale(0.8) translateY(10px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.intro-profile.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.intro-profile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 15%;
+  display: block;
+}
+
+@media (min-width: 640px) {
+  .intro-profile {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+/* ── Name text – skywriting reveal ─────────────────────────── */
+
+.intro-name {
+  font-family: var(--font-family, inherit);
+  font-size: clamp(2rem, 8vw, 5rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  margin: 0;
+  padding: 0 1rem;
+
+  /* Accent gradient text matching the design system */
+  background: var(--gradient-accent);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* Skywriting: clip reveals left→right, text starts blurry like smoke */
+  clip-path: inset(0 100% 0 0);
+  filter: blur(10px);
+
+  animation:
+    skywrite-reveal 2.8s cubic-bezier(0.22, 0.61, 0.36, 1) 0.4s forwards,
+    text-sharpen 1.4s ease-out 2s forwards;
+}
+
+@keyframes skywrite-reveal {
+  to { clip-path: inset(0 0% 0 0); }
+}
+
+@keyframes text-sharpen {
+  to {
+    filter: blur(0);
+  }
+}
+
+/* ── Airplane ──────────────────────────────────────────────── */
+
+.airplane-container {
+  position: absolute;
+  width: 180px;
+  height: 90px;
+  /* Centre the element on the path point */
+  margin-left: -90px;
+  margin-top: -45px;
+  pointer-events: none;
+  will-change: offset-distance, transform, opacity;
+  opacity: 0;
+
+  /* offset-path is set dynamically via [style.offset-path] binding.
+     offset-rotate: auto keeps the nose tangent to the curve;
+     the -5deg offset tilts it slightly nose-up for style. */
+  offset-rotate: auto -5deg;
+  offset-anchor: center center;
+}
+
+.airplane-container.ready {
+  animation: fly-horizontal 3.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
+}
+
+/* Speed-streak lines trailing behind the plane */
+.airplane-container::before,
+.airplane-container::after {
+  content: '';
+  position: absolute;
+  right: 82%;
+  height: 1.5px;
+  border-radius: 1px;
+  background: linear-gradient(to right, transparent, rgba(147, 197, 253, 0.45));
+  opacity: 0;
+}
+
+.airplane-container.ready::before,
+.airplane-container.ready::after {
+  animation: speed-lines 3.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
+}
+
+.airplane-container::before {
+  top: 35%;
+  width: 34px;
+}
+
+.airplane-container::after {
+  top: 58%;
+  width: 22px;
+}
+
+@keyframes speed-lines {
+  0%        { opacity: 0; }
+  8%, 88%   { opacity: 1; }
+  100%      { opacity: 0; }
+}
+
+/* Radial glow halo around the plane */
+.airplane-glow {
+  position: absolute;
+  inset: -16px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(59, 130, 246, 0.12) 0%,
+    rgba(59, 130, 246, 0.03) 50%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: glow-pulse 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes glow-pulse {
+  0%   { opacity: 0.4; transform: scale(1); }
+  100% { opacity: 0.7; transform: scale(1.08); }
+}
+
+/* SVG paper airplane */
+.airplane-svg {
+  width: 100%;
+  height: 100%;
+  filter:
+    drop-shadow(0 0 6px rgba(147, 197, 253, 0.35))
+    drop-shadow(0 0 14px rgba(59, 130, 246, 0.12));
+}
+
+/* ── Airplane horizontal flight path ──────────────────────── */
+
+@keyframes fly-horizontal {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  6% {
+    opacity: 1;
+    transform: scale(0.9);
+  }
+  20% {
+    transform: scale(1);
+  }
+  80% {
+    transform: scale(1);
+  }
+  90% {
+    opacity: 1;
+    transform: scale(0.95);
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+/* ── Responsive tweaks ─────────────────────────────────────── */
+
+@media (min-width: 1200px) {
+  .airplane-container {
+    width: 240px;
+    height: 120px;
+    margin-left: -120px;
+    margin-top: -60px;
+  }
+
+  .airplane-container::before { width: 48px; }
+  .airplane-container::after  { width: 32px; }
+}
+
+@media (max-width: 640px) {
+  .airplane-container {
+    width: 120px;
+    height: 60px;
+    margin-left: -60px;
+    margin-top: -30px;
+  }
+
+  .airplane-container::before { width: 18px; }
+  .airplane-container::after  { width: 12px; }
+
+  .intro-name {
+    white-space: normal;
+    padding: 0 0.5rem;
+  }
+}
+
+/* ── Light theme adjustments ────────────────────────────────── */
+
+:host-context(body.light-theme) .intro-overlay {
+  background: var(--color-bg, #f8fafc);
+}
+
+:host-context(body.light-theme) .vignette {
+  background: radial-gradient(ellipse at center, transparent 50%, rgb(0 0 0 / 0.08) 100%);
+}
+
+:host-context(body.light-theme) .star {
+  background: var(--color-accent, #4f46e5);
+}
+
+:host-context(body.light-theme) .intro-profile {
+  border-color: rgb(79 70 229 / 0.3);
+  box-shadow:
+    0 0 0 4px rgb(79 70 229 / 0.08),
+    var(--shadow-glow, 0 0 20px rgb(79 70 229 / 0.12));
+}
+
+/* ── Accessibility: reduce motion ──────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-overlay {
+    animation: simple-fade 0.6s ease-out forwards;
+  }
+
+  .airplane-container,
+  .smoke-path,
+  .smoke-puff,
+  .star,
+  .ambient-glow,
+  .intro-name {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  .intro-profile {
+    transition: none !important;
+  }
+
+  @keyframes simple-fade {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+  }
+}
