@@ -17,13 +17,16 @@ interface Star {
   maxOpacity: string;
 }
 
-interface Particle {
+interface SmokePuff {
   id: number;
   left: string;
   top: string;
   delay: string;
   size: string;
-  drift: string;
+  opacity: string;
+  driftX: string;
+  driftY: string;
+  duration: string;
 }
 
 @Component({
@@ -36,15 +39,14 @@ export class AirplaneIntroComponent {
   /** Emits once the full intro animation has finished. */
   readonly animationComplete = output<void>();
 
-  protected readonly phase = signal<'playing' | 'exiting' | 'done'>('playing');
+  protected readonly phase = signal<'playing' | 'revealed' | 'exiting' | 'done'>('playing');
   protected readonly flightPath = signal<string>('');
-  protected readonly stars: Star[] = this.generateStars(60);
-  protected readonly particles: Particle[] = this.generateParticles(26);
+  protected readonly stars: Star[] = this.generateStars(50);
+  protected readonly smokePuffs: SmokePuff[] = this.generateSmokePuffs(45);
 
   /**
-   * CSS `offset-path` value computed from viewport dimensions.
-   * Maps the SVG viewBox (1200×800) bezier to real pixel coordinates
-   * so the airplane follows the exact same curve as the vapor trail.
+   * CSS `offset-path` binding for the airplane element.
+   * Horizontal flight path computed in real viewport pixels.
    */
   protected readonly airplaneOffsetPath = computed(() => {
     const p = this.flightPath();
@@ -55,29 +57,31 @@ export class AirplaneIntroComponent {
     afterNextRender(() => {
       this.computeFlightPath();
 
-      // Begin exit fade after airplane has crossed the screen
-      setTimeout(() => this.phase.set('exiting'), 3700);
+      // Name fully revealed & sharpened
+      setTimeout(() => this.phase.set('revealed'), 2800);
+      // Begin exit fade
+      setTimeout(() => this.phase.set('exiting'), 3800);
       // Fully done — remove from DOM
       setTimeout(() => {
         this.phase.set('done');
         this.animationComplete.emit();
-      }, 4700);
+      }, 4900);
     });
   }
 
   /**
-   * Convert the SVG trail bezier (viewBox 1200×800, preserveAspectRatio="none")
-   * into viewport-pixel coordinates so CSS offset-path traces the identical curve.
+   * Compute a nearly-horizontal flight path at ~42% from the top,
+   * matching the vertical center of "MAX BERRIDGE" in the intro layout.
+   * A very gentle S-curve keeps it dynamic without looking diagonal.
    */
   private computeFlightPath(): void {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    const mx = (x: number) => Math.round(((x / 1200) * vw) * 100) / 100;
-    const my = (y: number) => Math.round(((y / 800) * vh) * 100) / 100;
+    const y = vh * 0.50;          // vertical center of the name area
+    const sag = vh * 0.008;       // ±0.8% gentle curve
 
-    // Original SVG path: M -96 496 C 240 600, 720 160, 1296 -64
     this.flightPath.set(
-      `M ${mx(-96)} ${my(496)} C ${mx(240)} ${my(600)}, ${mx(720)} ${my(160)}, ${mx(1296)} ${my(-64)}`
+      `M ${-180} ${y} C ${vw * 0.3} ${y + sag}, ${vw * 0.7} ${y - sag}, ${vw + 180} ${y}`
     );
   }
 
@@ -100,26 +104,26 @@ export class AirplaneIntroComponent {
     });
   }
 
-  private generateParticles(count: number): Particle[] {
+  /**
+   * Generate smoke puffs scattered around the horizontal flight line.
+   * They appear staggered left-to-right, timed with the airplane.
+   */
+  private generateSmokePuffs(count: number): SmokePuff[] {
     return Array.from({ length: count }, (_, i) => {
-      const t = (i + 0.5) / count; // avoid exact 0 / 1
-      const x = this.cubic(t, -8, 20, 60, 108);
-      const y = this.cubic(t, 62, 75, 20, -8);
-      const yJitter = (Math.random() - 0.5) * 6;
+      const t = (i + 0.5) / count;                   // 0→1 left to right
+      const xJitter = (Math.random() - 0.5) * 6;     // ±3%
+      const yJitter = (Math.random() - 0.5) * 10;    // ±5%
       return {
         id: i,
-        left: `${x}%`,
-        top: `${y + yJitter}%`,
-        delay: `${0.5 + t * 2.7}s`,
-        size: `${2 + Math.random() * 3}px`,
-        drift: `${-25 + Math.random() * 50}px`,
+        left: `${t * 88 + 6 + xJitter}%`,            // 6–94% of viewport
+        top: `${50 + yJitter}%`,                       // ~50% from top (around name)
+        delay: `${0.3 + t * 2.6}s`,                   // follow the airplane
+        size: `${22 + Math.random() * 55}px`,
+        opacity: `${0.08 + Math.random() * 0.18}`,
+        driftX: `${(Math.random() - 0.5) * 35}px`,
+        driftY: `${-8 - Math.random() * 28}px`,       // drift upward
+        duration: `${2 + Math.random() * 1.2}s`,
       };
     });
-  }
-
-  /** Evaluate a cubic Bézier at parameter t ∈ [0, 1]. */
-  private cubic(t: number, p0: number, p1: number, p2: number, p3: number): number {
-    const u = 1 - t;
-    return u * u * u * p0 + 3 * u * u * t * p1 + 3 * u * t * t * p2 + t * t * t * p3;
   }
 }

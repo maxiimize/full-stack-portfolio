@@ -20,23 +20,23 @@
     }
   </div>
 
-  <!-- ── Vapor trail (SVG – three layers for glow depth) ── -->
+  <!-- ── Horizontal smoke trail (SVG) ── -->
   <svg class="trail-svg" viewBox="0 0 1200 800" preserveAspectRatio="none" aria-hidden="true">
     <defs>
-      <linearGradient id="trailGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <linearGradient id="smokeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
         <stop offset="0%"   stop-color="#3B82F6" stop-opacity="0" />
-        <stop offset="15%"  stop-color="#3B82F6" stop-opacity="0.4" />
-        <stop offset="45%"  stop-color="#8B5CF6" stop-opacity="0.7" />
-        <stop offset="75%"  stop-color="#06B6D4" stop-opacity="0.9" />
-        <stop offset="100%" stop-color="#22D3EE" stop-opacity="1" />
+        <stop offset="15%"  stop-color="#3B82F6" stop-opacity="0.15" />
+        <stop offset="45%"  stop-color="#8B5CF6" stop-opacity="0.25" />
+        <stop offset="75%"  stop-color="#06B6D4" stop-opacity="0.15" />
+        <stop offset="100%" stop-color="#06B6D4" stop-opacity="0" />
       </linearGradient>
 
-      <filter id="trailGlowWide" x="-20%" y="-40%" width="140%" height="180%">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="14" />
+      <filter id="smokeBlurWide" x="-10%" y="-80%" width="120%" height="260%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="18" />
       </filter>
 
-      <filter id="trailGlowMid" x="-20%" y="-40%" width="140%" height="180%">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
+      <filter id="smokeBlurCore" x="-10%" y="-80%" width="120%" height="260%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
         <feMerge>
           <feMergeNode in="blur" />
           <feMergeNode in="SourceGraphic" />
@@ -44,44 +44,44 @@
       </filter>
     </defs>
 
-    <!-- Wide glow -->
-    <path class="trail-path trail-wide"
-          d="M -96 496 C 240 600, 720 160, 1296 -64"
-          fill="none" stroke="url(#trailGrad)" stroke-width="22"
-          stroke-linecap="round" filter="url(#trailGlowWide)" opacity="0.35" />
+    <!-- Wide diffuse smoke haze -->
+    <path class="smoke-path smoke-wide"
+          d="M -96 400 C 300 403, 900 397, 1296 400"
+          fill="none" stroke="url(#smokeGrad)" stroke-width="70"
+          stroke-linecap="round" filter="url(#smokeBlurWide)" opacity="0.45" />
 
-    <!-- Medium glow -->
-    <path class="trail-path trail-mid"
-          d="M -96 496 C 240 600, 720 160, 1296 -64"
-          fill="none" stroke="url(#trailGrad)" stroke-width="7"
-          stroke-linecap="round" filter="url(#trailGlowMid)" />
-
-    <!-- Sharp core -->
-    <path class="trail-path trail-core"
-          d="M -96 496 C 240 600, 720 160, 1296 -64"
-          fill="none" stroke="url(#trailGrad)" stroke-width="2.5"
-          stroke-linecap="round" />
+    <!-- Core brighter smoke line -->
+    <path class="smoke-path smoke-core"
+          d="M -96 400 C 300 403, 900 397, 1296 400"
+          fill="none" stroke="url(#smokeGrad)" stroke-width="22"
+          stroke-linecap="round" filter="url(#smokeBlurCore)" opacity="0.35" />
   </svg>
 
-  <!-- ── Sparkle particles ── -->
-  <div class="particles" aria-hidden="true">
-    @for (p of particles; track p.id) {
+  <!-- ── Smoke puff particles ── -->
+  <div class="smoke-puffs" aria-hidden="true">
+    @for (p of smokePuffs; track p.id) {
       <span
-        class="particle"
+        class="smoke-puff"
         [style.left]="p.left"
         [style.top]="p.top"
         [style.width]="p.size"
         [style.height]="p.size"
-        [style.animation-delay]="p.delay"
-        [style.--drift]="p.drift">
+        [style.--smoke-delay]="p.delay"
+        [style.--smoke-opacity]="p.opacity"
+        [style.--drift-x]="p.driftX"
+        [style.--drift-y]="p.driftY"
+        [style.--smoke-duration]="p.duration">
       </span>
     }
   </div>
 
-  <!-- ── Sonic ripples ── -->
-  <div class="sonic-ripple ripple-1" aria-hidden="true"></div>
-  <div class="sonic-ripple ripple-2" aria-hidden="true"></div>
-  <div class="sonic-ripple ripple-3" aria-hidden="true"></div>
+  <!-- ── Centered content: profile image + name ── -->
+  <div class="intro-content" aria-hidden="true">
+    <div class="intro-profile" [class.visible]="phase() !== 'playing'">
+      <img src="profile.jpg" alt="Max Berridge" width="140" height="140" />
+    </div>
+    <h1 class="intro-name">MAX BERRIDGE</h1>
+  </div>
 
   <!-- ── Airplane ── -->
   <div class="airplane-container"
