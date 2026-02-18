@@ -4,3 +4,7 @@
 </main>
 <app-footer />
 <app-toast-container />
+
+@if (showIntro()) {
+  <app-airplane-intro (animationComplete)="onIntroComplete()" />
+}
