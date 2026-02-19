@@ -1,150 +1,64 @@
 @if (phase() !== 'done') {
 <div class="intro-overlay" [class.exiting]="phase() === 'exiting'">
 
-  <!-- ── Ambient light pools ── -->
-  <div class="ambient-glow" aria-hidden="true"></div>
-
-  <!-- ── Starfield ── -->
-  <div class="starfield" aria-hidden="true">
-    @for (star of stars; track star.id) {
-      <span
-        class="star"
-        [style.left]="star.left"
-        [style.top]="star.top"
-        [style.width]="star.size"
-        [style.height]="star.size"
-        [style.animation-delay]="star.delay"
-        [style.animation-duration]="star.duration"
-        [style.--max-opacity]="star.maxOpacity">
-      </span>
-    }
-  </div>
-
-  <!-- ── Horizontal smoke trail (SVG) ── -->
-  <svg class="trail-svg" viewBox="0 0 1200 800" preserveAspectRatio="none" aria-hidden="true">
-    <defs>
-      <linearGradient id="smokeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%"   stop-color="#3B82F6" stop-opacity="0" />
-        <stop offset="15%"  stop-color="#3B82F6" stop-opacity="0.15" />
-        <stop offset="45%"  stop-color="#8B5CF6" stop-opacity="0.25" />
-        <stop offset="75%"  stop-color="#06B6D4" stop-opacity="0.15" />
-        <stop offset="100%" stop-color="#06B6D4" stop-opacity="0" />
-      </linearGradient>
-
-      <filter id="smokeBlurWide" x="-10%" y="-80%" width="120%" height="260%">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="18" />
-      </filter>
-
-      <filter id="smokeBlurCore" x="-10%" y="-80%" width="120%" height="260%">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
-        <feMerge>
-          <feMergeNode in="blur" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
-    </defs>
-
-    <!-- Wide diffuse smoke haze -->
-    <path class="smoke-path smoke-wide"
-          d="M -96 400 C 300 403, 900 397, 1296 400"
-          fill="none" stroke="url(#smokeGrad)" stroke-width="70"
-          stroke-linecap="round" filter="url(#smokeBlurWide)" opacity="0.45" />
-
-    <!-- Core brighter smoke line -->
-    <path class="smoke-path smoke-core"
-          d="M -96 400 C 300 403, 900 397, 1296 400"
-          fill="none" stroke="url(#smokeGrad)" stroke-width="22"
-          stroke-linecap="round" filter="url(#smokeBlurCore)" opacity="0.35" />
+  <!-- ── Grain / noise texture ── -->
+  <svg class="noise-texture" aria-hidden="true" width="100%" height="100%">
+    <filter id="introNoise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="saturate" values="0" />
+    </filter>
+    <rect width="100%" height="100%" filter="url(#introNoise)" opacity="0.03" />
   </svg>
 
-  <!-- ── Smoke puff particles ── -->
-  <div class="smoke-puffs" aria-hidden="true">
-    @for (p of smokePuffs; track p.id) {
+  <!-- ── Aurora gradient orbs ── -->
+  <div class="aurora" aria-hidden="true">
+    <div class="aurora-orb orb-1"></div>
+    <div class="aurora-orb orb-2"></div>
+    <div class="aurora-orb orb-3"></div>
+  </div>
+
+  <!-- ── Floating particles ── -->
+  <div class="particle-field" aria-hidden="true">
+    @for (p of particles; track p.id) {
       <span
-        class="smoke-puff"
-        [style.left]="p.left"
-        [style.top]="p.top"
+        class="particle"
+        [style.left]="p.x"
+        [style.top]="p.y"
         [style.width]="p.size"
         [style.height]="p.size"
-        [style.--smoke-delay]="p.delay"
-        [style.--smoke-opacity]="p.opacity"
-        [style.--drift-x]="p.driftX"
-        [style.--drift-y]="p.driftY"
-        [style.--smoke-duration]="p.duration">
+        [style.--p-delay]="p.delay"
+        [style.--p-duration]="p.duration"
+        [style.--p-opacity]="p.opacity"
+        [style.--p-drift]="p.drift">
       </span>
     }
   </div>
 
-  <!-- ── Centered content: profile image + name ── -->
+  <!-- ── Scan line ── -->
+  <div class="scan-line" aria-hidden="true"></div>
+
+  <!-- ── Center content ── -->
   <div class="intro-content" aria-hidden="true">
-    <div class="intro-profile" [class.visible]="phase() !== 'playing'">
-      <img src="profile.jpg" alt="Max Berridge" width="140" height="140" />
+
+    <!-- Developer code symbol -->
+    <div class="code-symbol">
+      <span class="bracket bracket-left">&lt;</span>
+      <span class="bracket bracket-right">/&gt;</span>
+      <!-- Glow burst when brackets converge -->
+      <div class="symbol-glow"></div>
+      <!-- Ripple rings -->
+      <div class="ripple ripple-1"></div>
+      <div class="ripple ripple-2"></div>
     </div>
-    <h1 class="intro-name">MAX BERRIDGE</h1>
-  </div>
 
-  <!-- ── Airplane ── -->
-  <div class="airplane-container"
-       [class.ready]="!!flightPath()"
-       [style.offset-path]="airplaneOffsetPath()"
-       aria-hidden="true">
-    <!-- Radial glow halo -->
-    <div class="airplane-glow"></div>
+    <!-- Title -->
+    <h1 class="intro-title">FULL-STACK DEVELOPER</h1>
 
-    <!-- Paper airplane SVG – tip points right (direction of travel) -->
-    <svg class="airplane-svg" viewBox="0 0 200 100" fill="none">
-      <defs>
-        <!-- Upper wing surface – bright paper facing the light -->
-        <linearGradient id="paperTop" x1="80" y1="15" x2="80" y2="50" gradientUnits="userSpaceOnUse">
-          <stop offset="0%"   stop-color="#F8FAFF" />
-          <stop offset="50%"  stop-color="#E0EAFF" />
-          <stop offset="100%" stop-color="#BFDBFE" />
-        </linearGradient>
-        <!-- Lower wing surface – in shadow -->
-        <linearGradient id="paperBottom" x1="80" y1="50" x2="80" y2="78" gradientUnits="userSpaceOnUse">
-          <stop offset="0%"   stop-color="#93C5FD" />
-          <stop offset="100%" stop-color="#3B82F6" />
-        </linearGradient>
-        <!-- Edge highlight for the fold -->
-        <linearGradient id="foldEdge" x1="190" y1="50" x2="20" y2="50" gradientUnits="userSpaceOnUse">
-          <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="0.8" />
-          <stop offset="100%" stop-color="#93C5FD" stop-opacity="0.3" />
-        </linearGradient>
-      </defs>
+    <!-- Accent line -->
+    <div class="accent-line"></div>
 
-      <!-- === Upper wing (top surface, catches light) === -->
-      <polygon points="192,50 14,16 32,50"
-               fill="url(#paperTop)"
-               stroke="#93C5FD" stroke-width="0.7"
-               stroke-linejoin="round" />
-
-      <!-- Upper wing highlight near leading edge -->
-      <polygon points="192,50 18,19 28,46"
-               fill="white" opacity="0.18" />
-
-      <!-- === Lower wing (underside, in shadow) === -->
-      <polygon points="192,50 32,50 14,76"
-               fill="url(#paperBottom)"
-               stroke="#7DAFED" stroke-width="0.7"
-               stroke-linejoin="round" />
-
-      <!-- Lower wing subtle inner shadow -->
-      <polygon points="186,50 34,50 18,72"
-               fill="#1E40AF" opacity="0.1" />
-
-      <!-- === Center fold line (the crease) === -->
-      <line x1="192" y1="50" x2="24" y2="50"
-            stroke="url(#foldEdge)" stroke-width="1" />
-
-      <!-- === Tail fin (vertical fold at back) === -->
-      <polygon points="22,50 14,16 14,34"
-               fill="#DBEAFE" stroke="#93C5FD" stroke-width="0.5"
-               stroke-linejoin="round" opacity="0.7" />
-
-      <!-- Tail fin highlight -->
-      <polygon points="20,50 15,20 15,32"
-               fill="white" opacity="0.12" />
-    </svg>
+    <!-- Tagline -->
+    <p class="intro-tagline">Designing &amp; building for the modern web</p>
   </div>
 
   <!-- ── Vignette ── -->

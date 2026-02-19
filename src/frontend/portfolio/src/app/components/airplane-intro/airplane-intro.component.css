@@ -1,5 +1,7 @@
 /* =============================================================
-   Airplane Intro – Horizontal skywriting reveal
+   Modern Portfolio Intro – "Nexus" theme
+   Cinematic developer identity reveal with aurora, particles,
+   and converging code-symbol brackets.
    ============================================================= */
 
 /* ── Overlay ───────────────────────────────────────────────── */
@@ -8,154 +10,170 @@
   position: fixed;
   inset: 0;
   z-index: 10000;
-  background: var(--color-bg, #0a0f1e);
+  background: #060a13;
   overflow: hidden;
-  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 1s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: opacity, transform;
+  transition: opacity 1.1s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 1.1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .intro-overlay.exiting {
   opacity: 0;
-  transform: translateY(-3%) scale(1.02);
+  transform: scale(1.05);
   pointer-events: none;
 }
 
-/* ── Ambient glow ──────────────────────────────────────────── */
+/* ── Noise / grain texture ─────────────────────────────────── */
 
-.ambient-glow {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse at 30% 50%, rgb(59 130 246 / 0.08) 0%, transparent 55%),
-    radial-gradient(ellipse at 70% 40%, rgb(139 92 246 / 0.06) 0%, transparent 55%),
-    radial-gradient(ellipse at 50% 60%, rgb(6 182 212 / 0.04) 0%, transparent 50%);
-  opacity: 0;
-  animation: ambient-fade 3.5s ease-in-out forwards;
-  pointer-events: none;
-}
-
-@keyframes ambient-fade {
-  0%   { opacity: 0; }
-  30%  { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-/* ── Vignette ──────────────────────────────────────────────── */
-
-.vignette {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.45) 100%);
-  pointer-events: none;
-}
-
-/* ── Starfield ─────────────────────────────────────────────── */
-
-.starfield {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.star {
-  position: absolute;
-  border-radius: 50%;
-  background: white;
-  opacity: 0;
-  will-change: opacity, transform;
-  animation: star-twinkle var(--duration, 2s) ease-in-out infinite;
-}
-
-@keyframes star-twinkle {
-  0%, 100% {
-    opacity: 0.05;
-    transform: scale(0.6);
-  }
-  50% {
-    opacity: var(--max-opacity, 0.5);
-    transform: scale(1.2);
-  }
-}
-
-/* ── Horizontal smoke trail (SVG) ──────────────────────────── */
-
-.trail-svg {
+.noise-texture {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
+  mix-blend-mode: overlay;
 }
 
-.smoke-path {
-  stroke-dasharray: 1800;
-  stroke-dashoffset: 1800;
+/* ── Aurora gradient orbs ──────────────────────────────────── */
+
+.aurora {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  animation: aurora-in 1.6s ease 0.1s forwards;
 }
 
-.smoke-wide {
-  animation:
-    draw-smoke 3s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards,
-    fade-smoke 1.2s ease-in 3.2s forwards;
+@keyframes aurora-in {
+  to { opacity: 1; }
 }
 
-.smoke-core {
-  animation:
-    draw-smoke 2.9s cubic-bezier(0.22, 0.61, 0.36, 1) 0.35s forwards,
-    fade-smoke 1s ease-in 3.2s forwards;
+.aurora-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  will-change: transform;
 }
 
-@keyframes draw-smoke {
-  to { stroke-dashoffset: 0; }
+.orb-1 {
+  width: clamp(280px, 40vw, 600px);
+  height: clamp(280px, 40vw, 600px);
+  top: 8%;
+  left: 8%;
+  background: radial-gradient(circle, rgb(59 130 246 / 0.14) 0%, transparent 70%);
+  animation: drift-1 10s ease-in-out infinite alternate;
 }
 
-@keyframes fade-smoke {
-  to { opacity: 0; }
+.orb-2 {
+  width: clamp(220px, 35vw, 500px);
+  height: clamp(220px, 35vw, 500px);
+  top: 35%;
+  right: 5%;
+  background: radial-gradient(circle, rgb(139 92 246 / 0.11) 0%, transparent 70%);
+  animation: drift-2 13s ease-in-out infinite alternate;
 }
 
-/* ── Smoke puff particles ──────────────────────────────────── */
+.orb-3 {
+  width: clamp(200px, 30vw, 450px);
+  height: clamp(200px, 30vw, 450px);
+  bottom: 8%;
+  left: 35%;
+  background: radial-gradient(circle, rgb(6 182 212 / 0.09) 0%, transparent 70%);
+  animation: drift-3 15s ease-in-out infinite alternate;
+}
 
-.smoke-puffs {
+@keyframes drift-1 {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(45px, -30px); }
+}
+
+@keyframes drift-2 {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(-35px, 28px); }
+}
+
+@keyframes drift-3 {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(30px, -22px); }
+}
+
+/* ── Floating particles ────────────────────────────────────── */
+
+.particle-field {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
 
-.smoke-puff {
+.particle {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgb(59 130 246 / 0.25) 0%,
-    rgb(139 92 246 / 0.10) 40%,
-    transparent 70%
-  );
-  filter: blur(14px);
+  background: rgb(148 163 184 / 0.8);
   opacity: 0;
   will-change: transform, opacity;
-  transform: translate(-50%, -50%);
-  animation: puff-rise var(--smoke-duration, 2.5s) ease-out var(--smoke-delay, 0s) forwards;
+  animation: particle-float var(--p-duration, 6s) ease-in-out var(--p-delay, 0s) infinite;
 }
 
-@keyframes puff-rise {
+@keyframes particle-float {
   0% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.15);
+    transform: translateY(0) scale(1);
   }
-  20% {
-    opacity: var(--smoke-opacity, 0.15);
-    transform: translate(-50%, -50%) scale(1);
+  15% {
+    opacity: var(--p-opacity, 0.3);
+  }
+  85% {
+    opacity: var(--p-opacity, 0.3);
   }
   100% {
     opacity: 0;
-    transform: translate(
-      calc(-50% + var(--drift-x, 0px)),
-      calc(-50% + var(--drift-y, -20px))
-    ) scale(1.4);
+    transform: translateY(var(--p-drift, -40px)) scale(0.4);
   }
 }
 
-/* ── Centered content (profile + name) ─────────────────────── */
+/* ── Scan line ─────────────────────────────────────────────── */
+
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(59 130 246 / 0.35) 15%,
+    rgb(139 92 246 / 0.55) 50%,
+    rgb(6 182 212 / 0.35) 85%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 20px 6px rgb(59 130 246 / 0.08),
+    0 0 50px 12px rgb(139 92 246 / 0.04);
+  top: -1px;
+  opacity: 0;
+  z-index: 2;
+  pointer-events: none;
+  animation: scan-sweep 1.6s cubic-bezier(0.35, 0, 0.25, 1) 0.08s forwards;
+}
+
+@keyframes scan-sweep {
+  0% {
+    top: -1px;
+    opacity: 0;
+  }
+  4% {
+    opacity: 0.8;
+  }
+  88% {
+    opacity: 0.8;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+/* ── Center content ────────────────────────────────────────── */
 
 .intro-content {
   position: absolute;
@@ -164,275 +182,307 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* Push content up so name center lands at ~50% viewport height.
-     Profile (160px) + gap (24px) sits above the name, so extra
-     bottom padding compensates to keep the name on the flight line. */
-  padding-bottom: 16vh;
   z-index: 5;
   pointer-events: none;
 }
 
-/* Profile image – fades in after name is being revealed */
-.intro-profile {
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin-bottom: var(--space-6, 1.5rem);
-  border: 2px solid rgb(59 130 246 / 0.3);
-  box-shadow:
-    0 0 0 4px rgb(59 130 246 / 0.08),
-    var(--shadow-glow, 0 0 20px rgb(59 130 246 / 0.15));
-  opacity: 0;
-  transform: scale(0.8) translateY(10px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-}
+/* ── Code symbol < /> ──────────────────────────────────────── */
 
-.intro-profile.visible {
-  opacity: 1;
-  transform: scale(1) translateY(0);
-}
-
-.intro-profile img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 15%;
-  display: block;
-}
-
-@media (min-width: 640px) {
-  .intro-profile {
-    width: 160px;
-    height: 160px;
-  }
-}
-
-/* ── Name text – skywriting reveal ─────────────────────────── */
-
-.intro-name {
-  font-family: var(--font-family, inherit);
-  font-size: clamp(2rem, 8vw, 5rem);
-  font-weight: 900;
-  letter-spacing: 0.06em;
+.code-symbol {
+  position: relative;
+  font-family: var(--font-family-mono, 'Fira Code', monospace);
+  font-size: clamp(3.5rem, 11vw, 7rem);
+  font-weight: 600;
   line-height: 1;
-  text-align: center;
-  text-transform: uppercase;
-  white-space: nowrap;
-  margin: 0;
-  padding: 0 1rem;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-10, 2.5rem);
+  display: flex;
+  align-items: center;
+  gap: 0.2em;
+}
 
-  /* Accent gradient text matching the design system */
-  background: var(--gradient-accent);
-  background-size: 200% auto;
+.bracket {
+  display: inline-block;
+  background: var(--gradient-accent, linear-gradient(135deg, #3B82F6, #8b5cf6, #06b6d4));
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-
-  /* Skywriting: clip reveals left→right, text starts blurry like smoke */
-  clip-path: inset(0 100% 0 0);
+  opacity: 0;
   filter: blur(10px);
-
-  animation:
-    skywrite-reveal 2.8s cubic-bezier(0.22, 0.61, 0.36, 1) 0.4s forwards,
-    text-sharpen 1.4s ease-out 2s forwards;
+  will-change: transform, opacity, filter;
 }
 
-@keyframes skywrite-reveal {
-  to { clip-path: inset(0 0% 0 0); }
+.bracket-left {
+  transform: translateX(-50px);
+  animation: bracket-in-left 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
 }
 
-@keyframes text-sharpen {
+.bracket-right {
+  transform: translateX(50px);
+  animation: bracket-in-right 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
+}
+
+@keyframes bracket-in-left {
   to {
+    opacity: 1;
+    transform: translateX(0);
     filter: blur(0);
   }
 }
 
-/* ── Airplane ──────────────────────────────────────────────── */
+@keyframes bracket-in-right {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+}
 
-.airplane-container {
+/* ── Glow burst (when brackets converge) ──────────────────── */
+
+.symbol-glow {
   position: absolute;
-  width: 180px;
+  top: 50%;
+  left: 50%;
+  width: 90px;
   height: 90px;
-  /* Centre the element on the path point */
-  margin-left: -90px;
-  margin-top: -45px;
-  pointer-events: none;
-  will-change: offset-distance, transform, opacity;
-  opacity: 0;
-
-  /* offset-path is set dynamically via [style.offset-path] binding.
-     offset-rotate: auto keeps the nose tangent to the curve;
-     the -5deg offset tilts it slightly nose-up for style. */
-  offset-rotate: auto -5deg;
-  offset-anchor: center center;
-}
-
-.airplane-container.ready {
-  animation: fly-horizontal 3.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
-}
-
-/* Speed-streak lines trailing behind the plane */
-.airplane-container::before,
-.airplane-container::after {
-  content: '';
-  position: absolute;
-  right: 82%;
-  height: 1.5px;
-  border-radius: 1px;
-  background: linear-gradient(to right, transparent, rgba(147, 197, 253, 0.45));
-  opacity: 0;
-}
-
-.airplane-container.ready::before,
-.airplane-container.ready::after {
-  animation: speed-lines 3.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
-}
-
-.airplane-container::before {
-  top: 35%;
-  width: 34px;
-}
-
-.airplane-container::after {
-  top: 58%;
-  width: 22px;
-}
-
-@keyframes speed-lines {
-  0%        { opacity: 0; }
-  8%, 88%   { opacity: 1; }
-  100%      { opacity: 0; }
-}
-
-/* Radial glow halo around the plane */
-.airplane-glow {
-  position: absolute;
-  inset: -16px;
+  border-radius: 50%;
   background: radial-gradient(
-    ellipse at center,
-    rgba(59, 130, 246, 0.12) 0%,
-    rgba(59, 130, 246, 0.03) 50%,
+    circle,
+    rgb(59 130 246 / 0.45) 0%,
+    rgb(139 92 246 / 0.2) 40%,
     transparent 70%
   );
-  border-radius: 50%;
-  animation: glow-pulse 0.9s ease-in-out infinite alternate;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  pointer-events: none;
+  animation: glow-burst 1.1s ease-out 0.9s forwards;
 }
 
-@keyframes glow-pulse {
-  0%   { opacity: 0.4; transform: scale(1); }
-  100% { opacity: 0.7; transform: scale(1.08); }
-}
-
-/* SVG paper airplane */
-.airplane-svg {
-  width: 100%;
-  height: 100%;
-  filter:
-    drop-shadow(0 0 6px rgba(147, 197, 253, 0.35))
-    drop-shadow(0 0 14px rgba(59, 130, 246, 0.12));
-}
-
-/* ── Airplane horizontal flight path ──────────────────────── */
-
-@keyframes fly-horizontal {
+@keyframes glow-burst {
   0% {
-    offset-distance: 0%;
     opacity: 0;
-    transform: scale(0.5);
-  }
-  6% {
-    opacity: 1;
-    transform: scale(0.9);
+    transform: translate(-50%, -50%) scale(0.2);
   }
   20% {
-    transform: scale(1);
-  }
-  80% {
-    transform: scale(1);
-  }
-  90% {
     opacity: 1;
-    transform: scale(0.95);
   }
   100% {
-    offset-distance: 100%;
     opacity: 0;
-    transform: scale(0.6);
+    transform: translate(-50%, -50%) scale(4.5);
   }
 }
 
-/* ── Responsive tweaks ─────────────────────────────────────── */
+/* ── Ripple rings ──────────────────────────────────────────── */
 
-@media (min-width: 1200px) {
-  .airplane-container {
-    width: 240px;
-    height: 120px;
-    margin-left: -120px;
-    margin-top: -60px;
-  }
-
-  .airplane-container::before { width: 48px; }
-  .airplane-container::after  { width: 32px; }
+.ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid rgb(59 130 246 / 0.2);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  pointer-events: none;
 }
+
+.ripple-1 {
+  animation: ripple-expand 1.6s ease-out 0.95s forwards;
+}
+
+.ripple-2 {
+  animation: ripple-expand 1.6s ease-out 1.2s forwards;
+}
+
+@keyframes ripple-expand {
+  0% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(55);
+  }
+}
+
+/* ── Title ─────────────────────────────────────────────────── */
+
+.intro-title {
+  font-family: var(--font-family, 'Inter', sans-serif);
+  font-size: clamp(0.8rem, 2.5vw, 1.3rem);
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-text, #f1f5f9);
+  margin: 0 0 var(--space-6, 1.5rem);
+  padding: 0 1rem;
+  clip-path: inset(0 100% 0 0);
+  animation: clip-reveal 0.65s cubic-bezier(0.4, 0, 0.2, 1) 1.2s forwards;
+}
+
+@keyframes clip-reveal {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* ── Accent line ───────────────────────────────────────────── */
+
+.accent-line {
+  width: 56px;
+  height: 2px;
+  background: var(--gradient-accent, linear-gradient(135deg, #3B82F6, #8b5cf6, #06b6d4));
+  border-radius: 1px;
+  transform: scaleX(0);
+  transform-origin: center;
+  margin-bottom: var(--space-6, 1.5rem);
+  animation: line-expand 0.45s cubic-bezier(0.4, 0, 0.2, 1) 1.7s forwards;
+}
+
+@keyframes line-expand {
+  to { transform: scaleX(1); }
+}
+
+/* ── Tagline ───────────────────────────────────────────────── */
+
+.intro-tagline {
+  font-family: var(--font-family, 'Inter', sans-serif);
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: 400;
+  color: var(--color-text-secondary, #94a3b8);
+  letter-spacing: 0.06em;
+  margin: 0;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: tag-fade-up 0.65s ease-out 2s forwards;
+}
+
+@keyframes tag-fade-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Vignette ──────────────────────────────────────────────── */
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.5) 100%);
+  pointer-events: none;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
 
 @media (max-width: 640px) {
-  .airplane-container {
-    width: 120px;
-    height: 60px;
-    margin-left: -60px;
-    margin-top: -30px;
+  .code-symbol {
+    gap: 0.12em;
   }
 
-  .airplane-container::before { width: 18px; }
-  .airplane-container::after  { width: 12px; }
-
-  .intro-name {
-    white-space: normal;
+  .intro-title {
+    letter-spacing: 0.2em;
     padding: 0 0.5rem;
+  }
+
+  .intro-tagline {
+    font-size: var(--text-xs, 0.75rem);
+    padding: 0 1rem;
+    text-align: center;
   }
 }
 
-/* ── Light theme adjustments ────────────────────────────────── */
+@media (min-width: 1200px) {
+  .accent-line {
+    width: 72px;
+  }
+}
+
+/* ── Light theme ───────────────────────────────────────────── */
 
 :host-context(body.light-theme) .intro-overlay {
   background: var(--color-bg, #f8fafc);
 }
 
+:host-context(body.light-theme) .noise-texture {
+  opacity: 0.4;
+}
+
+:host-context(body.light-theme) .particle {
+  background: rgb(71 85 105 / 0.5);
+}
+
 :host-context(body.light-theme) .vignette {
-  background: radial-gradient(ellipse at center, transparent 50%, rgb(0 0 0 / 0.08) 100%);
+  background: radial-gradient(ellipse at center, transparent 50%, rgb(0 0 0 / 0.06) 100%);
 }
 
-:host-context(body.light-theme) .star {
-  background: var(--color-accent, #4f46e5);
+:host-context(body.light-theme) .orb-1 {
+  background: radial-gradient(circle, rgb(37 99 235 / 0.09) 0%, transparent 70%);
 }
 
-:host-context(body.light-theme) .intro-profile {
-  border-color: rgb(79 70 229 / 0.3);
+:host-context(body.light-theme) .orb-2 {
+  background: radial-gradient(circle, rgb(124 58 237 / 0.07) 0%, transparent 70%);
+}
+
+:host-context(body.light-theme) .orb-3 {
+  background: radial-gradient(circle, rgb(8 145 178 / 0.05) 0%, transparent 70%);
+}
+
+:host-context(body.light-theme) .scan-line {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(37 99 235 / 0.25) 15%,
+    rgb(124 58 237 / 0.4) 50%,
+    rgb(8 145 178 / 0.25) 85%,
+    transparent 100%
+  );
   box-shadow:
-    0 0 0 4px rgb(79 70 229 / 0.08),
-    var(--shadow-glow, 0 0 20px rgb(79 70 229 / 0.12));
+    0 0 15px 4px rgb(37 99 235 / 0.06),
+    0 0 40px 8px rgb(124 58 237 / 0.03);
 }
 
-/* ── Accessibility: reduce motion ──────────────────────────── */
+:host-context(body.light-theme) .symbol-glow {
+  background: radial-gradient(
+    circle,
+    rgb(37 99 235 / 0.3) 0%,
+    rgb(124 58 237 / 0.12) 40%,
+    transparent 70%
+  );
+}
+
+:host-context(body.light-theme) .ripple {
+  border-color: rgb(37 99 235 / 0.15);
+}
+
+/* ── Accessibility: reduced motion ─────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
   .intro-overlay {
     animation: simple-fade 0.6s ease-out forwards;
   }
 
-  .airplane-container,
-  .smoke-path,
-  .smoke-puff,
-  .star,
-  .ambient-glow,
-  .intro-name {
+  .bracket,
+  .particle,
+  .aurora-orb,
+  .symbol-glow,
+  .ripple,
+  .scan-line,
+  .intro-title,
+  .accent-line,
+  .intro-tagline {
     animation: none !important;
-    opacity: 0 !important;
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    filter: none !important;
   }
 
-  .intro-profile {
-    transition: none !important;
+  .aurora {
+    animation: none !important;
+    opacity: 1 !important;
   }
 
   @keyframes simple-fade {
