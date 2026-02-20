@@ -198,7 +198,8 @@
   margin-bottom: var(--space-10, 2.5rem);
   display: flex;
   align-items: center;
-  gap: 0.2em;
+  justify-content: center;
+  gap: 0;
 }
 
 .bracket {
@@ -210,11 +211,22 @@
   opacity: 0;
   filter: blur(10px);
   will-change: transform, opacity, filter;
+  text-align: center;
+}
+
+.bracket-left,
+.bracket-right {
+  min-width: 0.65em;
 }
 
 .bracket-left {
   transform: translateX(-50px);
   animation: bracket-in-left 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
+}
+
+.bracket-slash {
+  transform: scale(0.5);
+  animation: slash-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards;
 }
 
 .bracket-right {
@@ -226,6 +238,14 @@
   to {
     opacity: 1;
     transform: translateX(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes slash-in {
+  to {
+    opacity: 1;
+    transform: scale(1);
     filter: blur(0);
   }
 }
@@ -379,7 +399,7 @@
 
 @media (max-width: 640px) {
   .code-symbol {
-    gap: 0.12em;
+    gap: 0;
   }
 
   .intro-title {
