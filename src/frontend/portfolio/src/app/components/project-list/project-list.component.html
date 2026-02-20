@@ -7,35 +7,88 @@
   </div>
 
   <div class="hero-content container">
-    <!-- Identity block: photo + name -->
-    <div class="hero-identity">
-      <div class="hero-avatar">
-        <img src="profile.jpg" alt="Max Berridge" width="140" height="140" />
+    <div class="hero-layout">
+      <!-- Left: Avatar with ring + status -->
+      <div class="hero-visual">
+        <div class="hero-avatar-ring">
+          <div class="hero-avatar">
+            <img src="profile.jpg" alt="Max Berridge" width="180" height="180" />
+          </div>
+          <!-- Animated ring -->
+          <svg class="avatar-ring-svg" viewBox="0 0 200 200" aria-hidden="true">
+            <circle class="ring-track" cx="100" cy="100" r="96" fill="none" stroke-width="1" />
+            <circle class="ring-accent" cx="100" cy="100" r="96" fill="none" stroke-width="1.5" />
+          </svg>
+        </div>
+        <div class="hero-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          Available for work
+        </div>
       </div>
-      <h1 class="hero-name">MAX BERRIDGE</h1>
-    </div>
 
-    <p class="hero-eyebrow">Backend-Focused Full-Stack Developer</p>
-    <h2 class="hero-title">
-      Building production
-      <span class="text-gradient-animated">systems</span>
-    </h2>
-    <p class="hero-lead">
-      Hands-on experience shipping SaaS backends with .NET, FastAPI, React &amp; Angular.
-      Strong in APIs, databases and complex business logic.
-    </p>
-    <ul class="hero-bullets" aria-label="Key focus areas">
-      <li>.NET &amp; FastAPI backends</li>
-      <li>REST APIs &amp; JWT auth</li>
-      <li>Azure &amp; MongoDB deployments</li>
-      <li>AI &amp; LLM integration</li>
-    </ul>
-    <p class="hero-cta-text">Relocating to Riga &mdash; open to full-time roles.</p>
+      <!-- Right: Text content -->
+      <div class="hero-text">
+        <p class="hero-eyebrow">Backend-Focused Full-Stack Developer</p>
+        <h1 class="hero-name">Max<br />Berridge</h1>
+        <p class="hero-lead">
+          I build robust, scalable backends and polished full-stack applications.
+          Shipping production SaaS with <strong>.NET</strong>, <strong>FastAPI</strong>,
+          <strong>React</strong> &amp; <strong>Angular</strong> &mdash; strong in APIs,
+          databases, and complex business logic.
+        </p>
+
+        <ul class="hero-chips" aria-label="Tech stack">
+          <li style="--i:0">C#</li>
+          <li style="--i:1">Python</li>
+          <li style="--i:2">TypeScript</li>
+          <li style="--i:3">ASP.NET Core</li>
+          <li style="--i:4">Angular</li>
+          <li style="--i:5">React</li>
+          <li style="--i:6">Next.js</li>
+          <li style="--i:7">Tailwind CSS</li>
+          <li style="--i:8">SQL Server</li>
+          <li style="--i:9">MongoDB</li>
+          <li style="--i:10">Azure</li>
+          <li style="--i:11">CI/CD</li>
+          <li style="--i:12">REST APIs</li>
+          <li style="--i:13">LLM Integration</li>
+          <li style="--i:14">Microservices</li>
+          <li style="--i:15">Scrum / Agile</li>
+        </ul>
+
+        <div class="hero-actions">
+          <a href="mailto:max&#64;berridge.dev" class="hero-btn hero-btn--ghost">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+            </svg>
+            Get in Touch
+          </a>
+        </div>
+
+        <p class="hero-location">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
+          Relocating to Riga &mdash; open to full-time roles
+        </p>
+      </div>
+    </div>
   </div>
+
+  <!-- Scroll indicator -->
+  <div class="hero-scroll" aria-hidden="true">
+    <span class="hero-scroll-label">Scroll to explore</span>
+    <svg class="hero-scroll-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  </div>
+
+  <!-- Bottom glow separator -->
+  <div class="hero-divider" aria-hidden="true"></div>
 </section>
 
 <!-- Projects Grid -->
-<section class="projects-section container" appScrollFade>
+<section id="projects" class="projects-section container" appScrollFade>
   <div class="section-header">
     <h2 class="section-title">Featured Projects</h2>
     <div class="section-line" aria-hidden="true"></div>
