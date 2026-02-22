@@ -367,6 +367,10 @@
   align-items: center;
   gap: 0.25rem;
   animation: hero-fade-up 0.5s ease 0.8s both;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
 .hero-scroll-label {

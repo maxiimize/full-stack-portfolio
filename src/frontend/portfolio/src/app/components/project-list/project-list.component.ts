@@ -24,6 +24,10 @@ export class ProjectListComponent implements OnInit {
 
   constructor(private readonly projectService: ProjectService) {}
 
+  scrollToProjects(): void {
+    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+  }
+
   resolveUrl(url: string): string {
     return this.projectService.resolveScreenshotUrl(url);
   }
