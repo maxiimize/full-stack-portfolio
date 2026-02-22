@@ -69,7 +69,7 @@
   height: clamp(220px, 35vw, 500px);
   top: 35%;
   right: 5%;
-  background: radial-gradient(circle, rgb(139 92 246 / 0.11) 0%, transparent 70%);
+  background: radial-gradient(circle, rgb(58 123 255 / 0.08) 0%, transparent 70%);
   animation: drift-2 13s ease-in-out infinite alternate;
 }
 
@@ -78,7 +78,7 @@
   height: clamp(200px, 30vw, 450px);
   bottom: 8%;
   left: 35%;
-  background: radial-gradient(circle, rgb(6 182 212 / 0.09) 0%, transparent 70%);
+  background: radial-gradient(circle, rgb(58 123 255 / 0.05) 0%, transparent 70%);
   animation: drift-3 15s ease-in-out infinite alternate;
 }
 
@@ -141,14 +141,12 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgb(59 130 246 / 0.35) 15%,
-    rgb(139 92 246 / 0.55) 50%,
-    rgb(6 182 212 / 0.35) 85%,
+    rgb(58 123 255 / 0.3) 15%,
+    rgb(58 123 255 / 0.5) 50%,
+    rgb(58 123 255 / 0.3) 85%,
     transparent 100%
   );
-  box-shadow:
-    0 0 20px 6px rgb(59 130 246 / 0.08),
-    0 0 50px 12px rgb(139 92 246 / 0.04);
+  box-shadow: 0 0 20px 6px rgb(58 123 255 / 0.06);
   top: -1px;
   opacity: 0;
   z-index: 2;
@@ -204,10 +202,7 @@
 
 .bracket {
   display: inline-block;
-  background: var(--gradient-accent, linear-gradient(135deg, #3B82F6, #8b5cf6, #06b6d4));
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--color-accent, #3A7BFF);
   opacity: 0;
   filter: blur(10px);
   will-change: transform, opacity, filter;
@@ -269,8 +264,8 @@
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgb(59 130 246 / 0.45) 0%,
-    rgb(139 92 246 / 0.2) 40%,
+    rgb(58 123 255 / 0.35) 0%,
+    rgb(58 123 255 / 0.1) 40%,
     transparent 70%
   );
   transform: translate(-50%, -50%) scale(0);
@@ -302,7 +297,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  border: 1px solid rgb(59 130 246 / 0.2);
+  border: 1px solid rgb(58 123 255 / 0.15);
   transform: translate(-50%, -50%) scale(0);
   opacity: 0;
   pointer-events: none;
@@ -353,7 +348,7 @@
 .accent-line {
   width: 56px;
   height: 2px;
-  background: var(--gradient-accent, linear-gradient(135deg, #3B82F6, #8b5cf6, #06b6d4));
+  background: var(--color-accent, #3A7BFF);
   border-radius: 1px;
   transform: scaleX(0);
   transform-origin: center;
@@ -443,38 +438,36 @@
 }
 
 :host-context(body.light-theme) .orb-2 {
-  background: radial-gradient(circle, rgb(124 58 237 / 0.07) 0%, transparent 70%);
+  background: radial-gradient(circle, rgb(37 99 235 / 0.06) 0%, transparent 70%);
 }
 
 :host-context(body.light-theme) .orb-3 {
-  background: radial-gradient(circle, rgb(8 145 178 / 0.05) 0%, transparent 70%);
+  background: radial-gradient(circle, rgb(37 99 235 / 0.04) 0%, transparent 70%);
 }
 
 :host-context(body.light-theme) .scan-line {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgb(37 99 235 / 0.25) 15%,
-    rgb(124 58 237 / 0.4) 50%,
-    rgb(8 145 178 / 0.25) 85%,
+    rgb(37 99 235 / 0.2) 15%,
+    rgb(37 99 235 / 0.35) 50%,
+    rgb(37 99 235 / 0.2) 85%,
     transparent 100%
   );
-  box-shadow:
-    0 0 15px 4px rgb(37 99 235 / 0.06),
-    0 0 40px 8px rgb(124 58 237 / 0.03);
+  box-shadow: 0 0 15px 4px rgb(37 99 235 / 0.06);
 }
 
 :host-context(body.light-theme) .symbol-glow {
   background: radial-gradient(
     circle,
-    rgb(37 99 235 / 0.3) 0%,
-    rgb(124 58 237 / 0.12) 40%,
+    rgb(37 99 235 / 0.25) 0%,
+    rgb(37 99 235 / 0.08) 40%,
     transparent 70%
   );
 }
 
 :host-context(body.light-theme) .ripple {
-  border-color: rgb(37 99 235 / 0.15);
+  border-color: rgb(37 99 235 / 0.12);
 }
 
 /* ── Accessibility: reduced motion ─────────────────────────── */

@@ -46,8 +46,6 @@ module.exports = {
           DEFAULT: 'var(--color-accent)',
           hover: 'var(--color-accent-hover)',
           subtle: 'var(--color-accent-subtle)',
-          2: 'var(--color-accent-2)',
-          3: 'var(--color-accent-3)',
         },
         muted: 'var(--color-text-muted)',
       },
