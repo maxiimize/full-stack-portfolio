@@ -1,10 +1,6 @@
 :host {
   display: block;
-  background:
-    radial-gradient(ellipse 50% 35% at 80% 0%, rgb(59 130 246 / 0.07), transparent),
-    radial-gradient(ellipse 45% 30% at 10% 55%, rgb(139 92 246 / 0.05), transparent),
-    radial-gradient(ellipse 40% 25% at 85% 90%, rgb(6 182 212 / 0.04), transparent),
-    var(--color-bg);
+  background: var(--color-bg);
 }
 
 /* ── Hero ── */
@@ -42,8 +38,8 @@
 .hero-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.12;
+  filter: blur(120px);
+  opacity: 0.06;
 }
 
 .hero-orb--1 {
@@ -52,16 +48,10 @@
   background: var(--color-accent);
   top: -15%;
   right: -5%;
-  animation: float 8s ease-in-out infinite;
 }
 
 .hero-orb--2 {
-  width: clamp(260px, 32vw, 420px);
-  height: clamp(260px, 32vw, 420px);
-  background: var(--color-accent-2);
-  bottom: -10%;
-  left: -6%;
-  animation: float 10s ease-in-out infinite reverse;
+  display: none;
 }
 
 .hero-grid {
@@ -133,12 +123,11 @@
   inset: 8px;
   border-radius: 50%;
   overflow: hidden;
-  box-shadow: var(--shadow-glow);
-  transition: box-shadow var(--transition-base);
+  border: 2px solid var(--color-border);
 }
 
 .hero-avatar:hover {
-  box-shadow: var(--shadow-glow-lg);
+  border-color: var(--color-border-hover);
 }
 
 .hero-avatar img {
@@ -193,7 +182,6 @@
   height: 7px;
   border-radius: 50%;
   background: var(--color-success);
-  box-shadow: 0 0 6px rgb(34 197 94 / 0.5);
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
@@ -233,14 +221,8 @@
   letter-spacing: -0.03em;
   line-height: 1;
   margin: 0 0 var(--space-5);
-  background: var(--gradient-accent);
-  background-size: 200% auto;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation:
-    hero-fade-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both,
-    gradient-shift 4s ease infinite 1.5s;
+  color: var(--color-text);
+  animation: hero-fade-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
 }
 
 @media (min-width: 1024px) {
@@ -295,7 +277,6 @@
 .hero-chips li:hover {
   border-color: var(--color-accent);
   color: var(--color-text);
-  box-shadow: 0 0 8px rgb(59 130 246 / 0.1);
 }
 
 /* ── CTA ── */
@@ -414,15 +395,8 @@
   left: 10%;
   right: 10%;
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--color-border-hover) 30%,
-    var(--color-accent) 50%,
-    var(--color-border-hover) 70%,
-    transparent 100%
-  );
-  opacity: 0.4;
+  background: var(--color-border);
+  opacity: 0.5;
 }
 
 /* ── Keyframes ── */
@@ -467,11 +441,7 @@
 .section-line {
   flex: 1;
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    var(--color-border-hover) 0%,
-    transparent 100%
-  );
+  background: var(--color-border);
 }
 
 .card-tags {
@@ -490,7 +460,7 @@
   align-items: center;
   justify-content: center;
   height: 220px;
-  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-bg) 100%);
+  background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text-muted);
   opacity: 0.4;

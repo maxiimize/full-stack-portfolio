@@ -2,15 +2,15 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: rgb(10 15 30 / 0.7);
-  border-bottom: 1px solid rgb(30 41 59 / 0.5);
+  background-color: rgb(11 15 20 / 0.8);
+  border-bottom: 1px solid var(--color-border);
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
 }
 
 :host-context(body.light-theme) .site-header {
   background-color: rgb(248 250 252 / 0.8);
-  border-bottom-color: rgb(226 232 240 / 0.6);
+  border-bottom-color: var(--color-border);
 }
 
 .header-inner {
@@ -40,7 +40,7 @@
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  background: var(--gradient-accent);
+  background-color: var(--color-accent);
   color: #fff;
   font-family: var(--font-family-mono);
   font-size: 0.65rem;
@@ -54,10 +54,7 @@
   font-size: var(--text-lg);
   font-weight: 800;
   letter-spacing: var(--tracking-tight);
-  background: var(--gradient-accent);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--color-text);
 }
 
 /* ── Navigation ── */
@@ -163,7 +160,6 @@
   color: var(--color-accent);
   border-color: var(--color-accent);
   background-color: var(--color-accent-subtle);
-  box-shadow: 0 0 12px rgb(59 130 246 / 0.12);
 }
 
 .theme-toggle:active {
