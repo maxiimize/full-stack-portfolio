@@ -119,6 +119,13 @@
   border: none;
   cursor: pointer;
   font-family: var(--font-family);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+
+.header-link-btn::before {
+  display: none;
 }
 
 .header-link-icon {
@@ -148,12 +155,18 @@
   background-color: transparent;
   color: var(--color-text-muted);
   cursor: pointer;
+  text-transform: none;
+  letter-spacing: 0;
   transition:
     color            var(--transition-fast),
     border-color     var(--transition-fast),
     background-color var(--transition-fast),
     transform        var(--transition-fast),
     box-shadow       var(--transition-fast);
+}
+
+.theme-toggle::before {
+  display: none;
 }
 
 .theme-toggle:hover {
