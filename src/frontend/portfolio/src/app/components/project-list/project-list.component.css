@@ -1,10 +1,6 @@
 :host {
   display: block;
-  background:
-    radial-gradient(ellipse 50% 35% at 80% 0%, rgb(59 130 246 / 0.07), transparent),
-    radial-gradient(ellipse 45% 30% at 10% 55%, rgb(139 92 246 / 0.05), transparent),
-    radial-gradient(ellipse 40% 25% at 85% 90%, rgb(6 182 212 / 0.04), transparent),
-    var(--color-bg);
+  background: var(--color-bg);
 }
 
 /* ── Hero ── */
@@ -42,8 +38,8 @@
 .hero-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.12;
+  filter: blur(120px);
+  opacity: 0.06;
 }
 
 .hero-orb--1 {
@@ -52,16 +48,10 @@
   background: var(--color-accent);
   top: -15%;
   right: -5%;
-  animation: float 8s ease-in-out infinite;
 }
 
 .hero-orb--2 {
-  width: clamp(260px, 32vw, 420px);
-  height: clamp(260px, 32vw, 420px);
-  background: var(--color-accent-2);
-  bottom: -10%;
-  left: -6%;
-  animation: float 10s ease-in-out infinite reverse;
+  display: none;
 }
 
 .hero-grid {
@@ -133,12 +123,11 @@
   inset: 8px;
   border-radius: 50%;
   overflow: hidden;
-  box-shadow: var(--shadow-glow);
-  transition: box-shadow var(--transition-base);
+  border: 2px solid var(--color-border);
 }
 
 .hero-avatar:hover {
-  box-shadow: var(--shadow-glow-lg);
+  border-color: var(--color-border-hover);
 }
 
 .hero-avatar img {
@@ -193,7 +182,6 @@
   height: 7px;
   border-radius: 50%;
   background: var(--color-success);
-  box-shadow: 0 0 6px rgb(34 197 94 / 0.5);
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
@@ -233,14 +221,8 @@
   letter-spacing: -0.03em;
   line-height: 1;
   margin: 0 0 var(--space-5);
-  background: var(--gradient-accent);
-  background-size: 200% auto;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation:
-    hero-fade-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both,
-    gradient-shift 4s ease infinite 1.5s;
+  color: var(--color-text);
+  animation: hero-fade-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
 }
 
 @media (min-width: 1024px) {
@@ -295,7 +277,6 @@
 .hero-chips li:hover {
   border-color: var(--color-accent);
   color: var(--color-text);
-  box-shadow: 0 0 8px rgb(59 130 246 / 0.1);
 }
 
 /* ── CTA ── */
@@ -318,20 +299,44 @@
 .hero-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  font-size: var(--text-sm);
-  font-weight: 600;
-  letter-spacing: var(--tracking-wide);
-  padding: 0.65rem 1.35rem;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.6rem;
   border-radius: var(--radius-md);
   text-decoration: none;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+  transition:
+    background  var(--transition-base),
+    color       var(--transition-base),
+    border-color var(--transition-base),
+    box-shadow  var(--transition-base),
+    transform   var(--transition-fast);
   white-space: nowrap;
 }
 
+.hero-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.07), transparent);
+  transition: left 0.5s ease;
+  pointer-events: none;
+}
+
+.hero-btn:hover::before {
+  left: 100%;
+}
+
 .hero-btn:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
 }
 
 .hero-btn--ghost {
@@ -341,14 +346,23 @@
 }
 
 .hero-btn--ghost:hover {
-  border-color: var(--color-border-hover);
-  color: var(--color-text);
-  background: var(--color-surface);
+  border-color: var(--color-accent);
+  color: #fff;
+  background: var(--color-accent);
+  box-shadow:
+    0 0 24px rgb(58 123 255 / 0.25),
+    0 4px 12px rgb(0 0 0 / 0.3);
+  transform: translateY(-2px);
 }
 
 .hero-btn svg {
-  opacity: 0.7;
+  opacity: 0.8;
   flex-shrink: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.hero-btn:hover svg {
+  opacity: 1;
 }
 
 .hero-location {
@@ -386,6 +400,17 @@
   align-items: center;
   gap: 0.25rem;
   animation: hero-fade-up 0.5s ease 0.8s both;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+.hero-scroll::before {
+  display: none;
 }
 
 .hero-scroll-label {
@@ -414,15 +439,8 @@
   left: 10%;
   right: 10%;
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--color-border-hover) 30%,
-    var(--color-accent) 50%,
-    var(--color-border-hover) 70%,
-    transparent 100%
-  );
-  opacity: 0.4;
+  background: var(--color-border);
+  opacity: 0.5;
 }
 
 /* ── Keyframes ── */
@@ -467,11 +485,7 @@
 .section-line {
   flex: 1;
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    var(--color-border-hover) 0%,
-    transparent 100%
-  );
+  background: var(--color-border);
 }
 
 .card-tags {
@@ -490,7 +504,7 @@
   align-items: center;
   justify-content: center;
   height: 220px;
-  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-bg) 100%);
+  background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text-muted);
   opacity: 0.4;
@@ -557,6 +571,13 @@
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   box-shadow: 0 2px 8px rgb(0 0 0 / 0.25);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+.carousel-btn::before {
+  display: none;
 }
 
 .card:hover .carousel-btn {
